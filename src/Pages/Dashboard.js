@@ -1,19 +1,30 @@
 import React from 'react'
-import { Container, Typography } from "@material-ui/core";
+import Button from '@material-ui/core/Button';
+import DashboardIcon from '@material-ui/icons/Dashboard';
 import { makeStyles } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
 
-// CSS Should be done this way
 const useStyles = makeStyles({
   root: {
-    background: "#FBFCFD",
+    color: "#2196F3",
+    fontFamily:"Arial",
+    textTransform: "none"
   },
+  typography: {
+    align:"left"
+  }
+
 });
 
 export default function Dashboard() {
   const classes = useStyles();
   return (
-    <Container className={classes.root}>
-      <Typography variant="h2">Dashboard</Typography>
-    </Container>
-  );
+    <Button className={classes.root}>
+      <Typography className={classes.typography}>
+        <DashboardIcon/>
+        Dashboard
+      </Typography>
+    </Button>
+    
+  )
 }
