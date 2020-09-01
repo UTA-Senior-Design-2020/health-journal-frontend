@@ -1,5 +1,5 @@
 import React from 'react'
-import Actions from './Actions';
+import Schedule from './Schedule';
 import NavProfile from './NavProfile';
 import Dashboard from './Dashboard';
 import Messages from './Messages';
@@ -11,7 +11,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles({
     root: {
-        width:"200px",
+      width:"100%",
       display:"flex",
       justifyContent:"flex-end",
       alignItems:"flex-start",
@@ -36,7 +36,7 @@ function Nav() {
                     <Patients/>
                 </div>
                 <div >
-                    <Actions/>
+                    <Schedule/>
                 </div>
                 <div style={{borderTop:"1px solid #E5E5E5"}}>
                     <RecentlySeen/>

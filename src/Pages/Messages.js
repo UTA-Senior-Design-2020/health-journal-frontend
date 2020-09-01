@@ -6,12 +6,10 @@ import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles({
   root: {
-    color: "#2196F3",
+    color: "rgba(0, 0, 0, 0.54)",
     fontFamily:"Arial",
-    textTransform: "none"
-  },
-  typography: {
-    align:"left"
+    textTransform: "none",
+    width:"100%"
   }
 
 });
@@ -20,10 +18,12 @@ export default function Messages() {
   const classes = useStyles();
   return (
     <Button className={classes.root}>
-      <Typography className={classes.typography}>
+      <div style={{marginRight:"30px"}} >
         <MessageIcon/>
-        Messages
-      </Typography>
+      </div>
+      <div style={{marginRight:"102px"}}>
+        Messages            
+      </div>
     </Button>
     
   )

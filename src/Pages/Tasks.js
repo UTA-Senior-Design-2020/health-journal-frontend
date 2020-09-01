@@ -6,12 +6,10 @@ import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles({
   root: {
-    color: "#2196F3",
+    color: "rgba(0, 0, 0, 0.54)",
     fontFamily:"Arial",
-    textTransform: "none"
-  },
-  typography: {
-    align:"left"
+    textTransform: "none",
+    width:"100%"
   }
 
 });
@@ -19,11 +17,13 @@ const useStyles = makeStyles({
 export default function Tasks() {
   const classes = useStyles();
   return (
-    <Button  className={classes.root}>
-      <Typography className={classes.typography}>
+    <Button className={classes.root}>
+      <div style={{marginRight:"30px"}} >
         <AssignmentIcon/>
-        Tasks
-      </Typography>
+      </div>
+      <div style={{marginRight:"130px"}}>
+        Tasks            
+      </div>
     </Button>
     
   )
