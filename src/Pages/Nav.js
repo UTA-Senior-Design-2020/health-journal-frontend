@@ -109,7 +109,7 @@ function Nav(props) {
               >
                 <ListItemIcon>
                   <Link to={navItem.to}>
-                    <Icon />
+                    <Icon color="primary" />
                   </Link>
                 </ListItemIcon>
                 <ListItemText primary={navItem.name} />
