@@ -1,8 +1,9 @@
 import React from "react";
-import Dashboard from './Pages/Dashboard';
-import Nav from './Pages/Nav';
+import Dashboard from "./Pages/Dashboard";
+import Tasks from "./Pages/Tasks";
+import Nav from "./Pages/Nav";
 //import About from './About';
-import {BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -14,14 +15,16 @@ const useStyles = makeStyles({
   },
 });
 
-
 function App() {
+  const classes = useStyles();
   return (
     <Router>
-      <div>
-        <Nav/>
-        <Route path="/dashboard" component={Dashboard}/>       
-      </div>
+      <Switch>
+        <Nav>
+          <Route exact path="/" component={Dashboard} />
+          <Route path="/Tasks" component={Tasks} />
+        </Nav>
+      </Switch>
     </Router>
   );
 }
