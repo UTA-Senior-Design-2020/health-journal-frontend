@@ -3,9 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles({
-  root: {
-    border: "solid blue 1px",
-  },
+  root: {},
 });
 
 export default function Tasks() {

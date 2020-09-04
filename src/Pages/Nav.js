@@ -59,7 +59,6 @@ const useStyles = makeStyles((theme) => ({
   },
   userInfo: {
     ...theme.mixins.toolbar,
-    border: "solid red 1px",
     padding: "2rem 1rem",
   },
   // necessary for content to be below app bar
@@ -77,14 +76,14 @@ function Nav(props) {
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <AppBar position="fixed" className={classes.appBar}>
+      {/* <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
           <Typography variant="h6" noWrap>
-            {/* TODO */}
+
             <Box color="text.primary">Create</Box>
           </Typography>
         </Toolbar>
-      </AppBar>
+      </AppBar> */}
       <Drawer
         className={classes.drawer}
         variant="permanent"
@@ -131,7 +130,8 @@ function Nav(props) {
         </List>
       </Drawer>
       <main className={classes.content}>
-        <div className={classes.toolbar} />
+        {/* Used to move content below top app bar */}
+        {/* <div className={classes.toolbar} /> */}
         {props.children}
       </main>
     </div>
