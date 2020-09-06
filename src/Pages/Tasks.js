@@ -10,7 +10,7 @@ const useStyles = makeStyles({
 
 export default function Tasks() {
   const classes = useStyles();
-  const [tasks, setTasks] = useState([{ id: 1, name: "Run" }]);
+  const [tasks, setTasks] = useState([{ id: 1, name: "Run" }]); // This is the new way of doing this.state with react hooks. it also users destructuring. We are using [] for the destrucure since useState returns something like 'stateVariable, stateUpdateFunction'. tasks contains the infromation, setTasks is a function that updates the tasks state.
 
   useEffect(() => {
     fetchTasks();
@@ -18,14 +18,18 @@ export default function Tasks() {
 
   async function fetchTasks(patientId) {
     try {
-      let apiResponse = await axios.get("/api/tasks");
-      console.log("api:", apiResponse);
-      let { data, status } = apiResponse;
+      let apiResponse = await axios.get("/api/tasks"); // axios.get is an async function, therefore we need to call it with await. AND because of that, we have to make this function 'fetchTasks' an async function.
+      console.log("tasks > api/tasks GET:", apiResponse);
+
+      let { data, status } = apiResponse; // apiResponse is a json object that contains many keys. What we are doing here is destructuring and getting only the keys and the value of 'data' and 'status'
+      console.log("tasks > apiResposne", apiResponse);
+      console.log("tasks > data:", data);
+      console.log("tasks > status:", status);
       if (status === 200) {
-        setTasks(data);
+        setTasks(data); // save the data from our api to the state variable 'tasks'
       }
     } catch (error) {
-      setTasks([]);
+      setTasks([]); // Api returned a status code other than 200 OK. Set tasks to nothing.
     }
   }
 
