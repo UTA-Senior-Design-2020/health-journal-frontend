@@ -47,16 +47,6 @@ export default function Tasks() {
           { title: "Type", field: "groupId" },
         ]}
       />
-      {/* {tasks.map((task) => {
-        return (
-          <div>
-            <Typography>ID: {task.id}</Typography>
-            <Typography>Patient: {task.patientID}</Typography>
-            <Typography>Title: {task.title}</Typography>
-            <Typography>Tasks Type: {task.groupId}</Typography>
-          </div>
-        );
-      })} */}
     </div>
   );
 }
