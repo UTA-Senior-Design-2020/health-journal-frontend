@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import CssBaseline from "@material-ui/core/CssBaseline";
 import MaterialTable from "material-table";
 import axios from "axios";
 
@@ -11,18 +10,22 @@ const useStyles = makeStyles({
 
 export default function Tasks() {
   const classes = useStyles();
-  const [tasks, setTasks] = useState([{ id: 0, name: "Run" }]);
+  const [tasks, setTasks] = useState([{ id: 1, name: "Run" }]);
 
   useEffect(() => {
     fetchTasks();
   }, []); // the second paramter of [] will cause this useEffect function to only run once the page has loaded. It will not run after that.
 
   async function fetchTasks(patientId) {
-    let apiResponse = await axios.get("/api/tasks");
-    console.log(apiResponse);
-    let { data, status, statusText } = apiResponse;
-    if (status === 200) {
-      setTasks(data);
+    try {
+      let apiResponse = await axios.get("/api/tasks");
+      console.log("api:", apiResponse);
+      let { data, status } = apiResponse;
+      if (status === 200) {
+        setTasks(data);
+      }
+    } catch (error) {
+      setTasks([]);
     }
   }
 
