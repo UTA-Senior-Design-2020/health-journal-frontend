@@ -29,6 +29,7 @@ export default function Tasks() {
         setTasks(data); // save the data from our api to the state variable 'tasks'
       }
     } catch (error) {
+      console.log("tasks > error:", error);
       setTasks([]); // Api returned a status code other than 200 OK. Set tasks to nothing.
     }
   }
