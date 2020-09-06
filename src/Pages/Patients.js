@@ -1,14 +1,32 @@
 import React from 'react'
-import { Container, Typography} from "@material-ui/core";
+import MaterialTable from 'material-table';
+import { Container, Typography, Button, TextField} from "@material-ui/core";
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
 import { makeStyles } from "@material-ui/core/styles";
-import patient_pic from "./patient_pic.png"
-import ExampleComponent from "react-rounded-image";
 import StarsIcon from '@material-ui/icons/Stars';
 import Grid from '@material-ui/core/Grid';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import SearchIcon from '@material-ui/icons/Search';
+import Checkbox from '@material-ui/core/Checkbox';
+import { forwardRef } from 'react';
+
+import AddBox from '@material-ui/icons/AddBox';
+import ArrowDownward from '@material-ui/icons/ArrowDownward';
+import Check from '@material-ui/icons/Check';
+import ChevronLeft from '@material-ui/icons/ChevronLeft';
+import ChevronRight from '@material-ui/icons/ChevronRight';
+import Clear from '@material-ui/icons/Clear';
+import DeleteOutline from '@material-ui/icons/DeleteOutline';
+import Edit from '@material-ui/icons/Edit';
+import FilterList from '@material-ui/icons/FilterList';
+import FirstPage from '@material-ui/icons/FirstPage';
+import LastPage from '@material-ui/icons/LastPage';
+import Remove from '@material-ui/icons/Remove';
+import SaveAlt from '@material-ui/icons/SaveAlt';
+import Search from '@material-ui/icons/Search';
+import ViewColumn from '@material-ui/icons/ViewColumn';
 
 // CSS Should be done this way
 const useStyles = makeStyles({
@@ -17,14 +35,16 @@ const useStyles = makeStyles({
   },
   blueBox: { // Nicci Triani
       position: "absolute",
-      left: "13.55%",
-      right: "25.41%",
+      left: "21.88%",
+      //right: "25.41%",
       top: "11.11%",
       bottom: "66.94%",
       background: "#2196F3",
       /* Gray / Divider */
       border: '1px solid #E5E5E5',
       /* Nicci Triani */
+
+      width: "53.83%",
 
       fontFamily: "Roboto",
       fontStyle: "normal",
@@ -39,14 +59,15 @@ const useStyles = makeStyles({
   },
   patientPic: {
       //border: "1px solid #E5E5E5",
-      marginLeft: "13.55%",
-      marginTop: "-11.11%",
+      position: "absolute",
+      left: "22%",
+      top: "11.25%",
       z_index: "1",
   },
   sideBox: { // Add stuff here for idk what.
       position: "absolute",
-      left: "75.5%",
-      right: "2.19%",
+      left: "77.19%",
+      //right: "2.19%",
       top: "11.11%",
       bottom: "66.94%",
       
@@ -64,7 +85,7 @@ const useStyles = makeStyles({
   },
   topBar: { // Add New Patient
       position: "absolute",
-      left: "12.55%",
+      left: "20%",
       right: "0%",
       top: "0%",
       bottom: "0%",
@@ -73,9 +94,10 @@ const useStyles = makeStyles({
   },
   searchBox: { // Search
     position: "absolute",
-      left: "74.38%",
+      left: "77.19%",
       top: "1.5%",
-      width: "18.13%",
+      //width: "18.13%",
+      width: "225px",
       height: "5.56%",
       /* Background / Dark */
       background: "#E8E8E8",
@@ -102,16 +124,15 @@ const useStyles = makeStyles({
       width: "82.25%",
       height: "30.28%",
   },
-  buttonMessage: {
+  buttonWhiteFont: {
       /* Button */
       position: "absolute",
       textAlign: "center",
-      /*left: "43.75%",
-      right: "48.98%",
-      top: "79.11%",
-      bottom: "10.76%",*/
-      marginLeft: "51%",
-      marginTop: "-12%",
+      left: "55.23%",
+      top: "26.5%",
+      //bottom: "10.76%",
+      //marginLeft: "51%",
+      //marginTop: "-12%",
       height:"5%",
       width: "6%",
       
@@ -128,91 +149,36 @@ const useStyles = makeStyles({
       background: "#2196F3",
       color: "#FFFFFF",
   },
-  buttonBroadcast: {
-    /* Button */
-    position: "absolute",
-    textAlign: "center",
+//blue buttons
+  buttonBlueFont: {
+      position: "absolute",
+      height: "16px",
+      top: "26.5%",
+      left: "78.75%",
+      height: "5%",
+      
+      /* BUTTON - med 14 (16px, 1.25px) */
+      fontFamily: "Roboto",
+      fontStyle: "normal",
+      fontHeight: "500",
+      fontSize: "14px",
+      lineHeight: "16px",
+      
+      /* identical to box height, or 114% */
+      textAlign: "center",
+      letterSpacing: "1.25px",
+      textTransform: "uppercase",
 
-    marginLeft: "58%",
-    marginTop: "-12%",
-    height:"5%",
-    width: "7%",
-    
-    /* Button / Roboto Medium */
-    fontFamily: "Roboto",
-    fontStyle: "normal",
-    fontWeight: "500",
-    fontSize: "14px",
-    lineHeight: "16px",
-    
-    /* identical to box height, or 114% */
-    letterSpacing: "0.75px",
-
-    background: "#2196F3",
-    color: "#FFFFFF",
-},
-  buttonView: {
-    /* Button */
-    position: "absolute",
-    textAlign: "center",
-
-    marginLeft: "66%",
-    marginTop: "-12%",
-    height:"5%",
-    width: "6%",
-    
-    /* Button / Roboto Medium */
-    fontFamily: "Roboto",
-    fontStyle: "normal",
-    fontWeight: "500",
-    fontSize: "14px",
-    lineHeight: "16px",
-    
-    /* identical to box height, or 114% */
-    letterSpacing: "0.75px",
-
-    background: "#2196F3",
-    color: "#FFFFFF",
-},
-  patientsListLine1: { // styling // start here
-      position: "absolute",  
-      left: "21.82%",
-      right: "29.41%",
-      top: "71.67%",
-      bottom: "28.19%",
-      height: "1px",
-      width: "76.25%",
-      background: "#D9D5EC",
-  },
-  patientsListLine2: { // styling
-    position: "absolute",  
-    left: "21.82%",
-    right: "29.41%",
-    top: "80.14%",
-    bottom: "19.72%",
-    height: "1px",
-    width: "76.25%",
-    background: "#D9D5EC",
-  },
-  patientsListLine3: { // styling
-    position: "absolute",  
-    left: "21.82%",
-    right: "29.41%",
-    top: "88.61%",
-    bottom: "11.25%",
-    height: "1px",
-    width: "76.25%",
-    background: "#D9D5EC",
+      /* Primary / 500 - Accent */
+      color: "#2196F3",
   },
   iconsize: {
-    position: "absolute",
-    left: "8.33",
-    right: "8.33%",
-    top: "8.33%",
-    bottom: "8.33%",
-
-    /* Black / Inactive */
-    background: "rgba(0, 0, 0, 0.54)"
+      position: "absolute",
+      left: "8.33",
+      right: "8.33%",
+      top: "8.33%",
+      bottom: "8.33%",
+  
   }
 
 });
@@ -225,12 +191,6 @@ export default function Patients() {
     <Container className={classes.picturePlace}>
       <Typography></Typography>
     </Container>
-    <Container className={classes.patientsListLine1}>
-    </Container>
-    <Container className={classes.patientsListLine2}>
-    </Container>
-    <Container className={classes.patientsListLine3}>
-    </Container>
     </div>
     <SideBox />
     <PatientBox />
@@ -238,10 +198,11 @@ export default function Patients() {
     <SearchBox />
     <PatientsList />
     <PatientPic />
-    <StarsIcon />
     <ButtonMessage />
     <ButtonBroadcast />
     <ButtonView />
+    <ButtonCall />
+    <ButtonSkype />
     </React.Fragment>
   );
 }
@@ -250,34 +211,32 @@ export function PatientPic() {
     const classes = useStyles();
     return (
         <div className={classes.patientPic}>
-            <ExampleComponent
-            image={patient_pic}
-            roundedSize="0"
-            //imageWidth="16.17%"
-            //imageHeight="21.67%"
-            //max-width="5%"
-            //height="auto"
-            z-index="1"
-            />
-        <h2 className="profile-name" style={{marginLeft: "100px"}}>Nicccccc</h2>
-    </div>
+            <img src={require('./patient_pic.png')} 
+            style={{
+                width:"22.17%", borderRadius: "2px 0px 0px 2px", boxShadow: "5px 0px 4px rgba(0,0,0,2)",
+                }}/>
+        </div>
     )
 }
 
-
-export function PatientBox() {
+export function PatientBox() { // fix formatting for HH:MM & DD/MM/YY
     const classes = useStyles();
     return (
     <Card className={classes.blueBox}>
         <CardContent>
-          <Typography variant="h4" style={{paddingLeft:"250px",fontWeight:"bold"}}>Nicci Triani
+          <Typography variant="h4" style={{paddingLeft:"33.96%",fontWeight:"bold"}}>
+              Nicci Triani
           <br /> <br />
           </Typography>
-          <Typography variant="h6" style={{paddingLeft:"250px",}}>Last Seen: 1/2/20 <br />Next Appointment: 8/8/20
+          <Typography variant="h6" style={{paddingLeft:"33.96%",}}>
+              Last Seen: 1/2/20 <br />Next Appointment: 8/8/20
           </Typography>
           <br />
-          <Typography variant="h6" style={{paddingLeft:"250px",fontSize:"15px", textTransform: "uppercase", color: "rgba(255, 255, 255, 0.76)"}}>
-          NicciTriani@gmail.com <br />(555) 555-5555
+          <Typography variant="h6" style={{paddingLeft:"33.96%",fontSize:"15px", textTransform: "uppercase", color: "rgba(255, 255, 255, 0.76)"}}>
+            NicciTriani@gmail.com <br />(555) 555-5555
+          </Typography>
+          <Typography variant="h6" style={{paddingLeft:"83%", paddingBottom: "-25%", fontSize:"15px", color: "rgba(255, 255, 255, 0.76)"}}>
+              HH:MM DD/MM/YY
           </Typography>
         </CardContent>
     </Card>);
@@ -289,26 +248,70 @@ export function SideBox() {
     <Card className={classes.sideBox}>
         <CardActionArea>
             <CardContent>
-                <Typography variant="h5">
-                    Add stuff here for idk what
-                </Typography>
+              <Typography variant="h6" 
+              style={{fontFamily: "Roboto",
+              fontStyle: "normal",
+              fontWeight: "normal",
+              fontSize: "14px",
+              lineHeight: "20px",
+              /* or 133% */
+              letterSpacing: "0.4px",
+              
+              color: "#000000",
+              paddingLeft:"15px",
+              //mix-blend-mode: normal;
+              opacity: "0.6",}}>
+                  Something
+              </Typography>
+              <Typography variant="h5" style={{paddingLeft:"15px"}}>
+                  Add stuff here for idk what
+              </Typography>
             </CardContent>
         </CardActionArea>
     </Card>
         );
 }
 
-export function TopBar() { // needs icon
+export function ButtonCall() { // needs icon
+    const classes = useStyles();
+    return (
+    <Button className={classes.buttonBlueFont}>
+        <Typography variant="h5" >
+             Call
+         </Typography>
+    </Button>
+        );
+}
+
+export function ButtonSkype() {
+    const classes = useStyles();
+    return (
+    <Button className={classes.buttonBlueFont} style={{marginLeft: "100px"}}>
+        <Typography variant="h5" >
+             Skype
+         </Typography>
+    </Button>
+        );
+}
+
+export function TopBar() { 
     const classes = useStyles();
     return (
     <Card className={classes.topBar}>
-        <CardActionArea>
-            <CardContent>
-                <Typography variant="h5">
-                    Add New Patient
-                </Typography>
-            </CardContent>
-        </CardActionArea>
+        <Button style={{marginTop: "1.75%", marginLeft: "1.75%"}}
+        variant="contained"
+        color="default"
+        className={classes.button}
+        startIcon={<StarsIcon />}
+        >
+            Add New Patient
+        </Button>
+        <Button style={{marginLeft:"73%", marginTop: "2%"}}
+        color="default"
+        startIcon={<ExitToAppIcon />}
+        size="large"
+        >
+        </Button>
     </Card>
         );
 }
@@ -316,92 +319,106 @@ export function TopBar() { // needs icon
 export function SearchBox() {
     const classes = useStyles();
     return (
-    <Card className={classes.searchBox}>
-        <CardActionArea>
-            <CardContent>
-                <Typography variant="h5">
-                    Search
-                </Typography>
-            </CardContent>
-        </CardActionArea>
-    </Card>
+    <div className={classes.searchBox}>
+      <Grid container spacing={1} alignItems="flex-end">
+          <Grid item>
+              <SearchIcon />
+          </Grid>
+          <Grid item>
+              <TextField id="search-input" label="Search" />
+          </Grid>
+      </Grid>
+    </div>
         );
 }
 
-export function PatientsList() {
+export function PatientsList() { // expecting icons for search and clear
     const classes = useStyles();
+    const tableIcons = {
+        Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
+        Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
+        Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+        Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
+        DetailPanel: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
+        Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
+        Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
+        Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
+        FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
+        LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
+        NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
+        PreviousPage: forwardRef((props, ref) => <ChevronLeft {...props} ref={ref} />),
+        ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+        Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
+        SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
+        ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
+        ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
+      };
     return (
-    <Card className={classes.patientsList}>
-        <CardActionArea>
-            <CardContent>
-            <Typography color="textSecondary" gutterBottom>
-            Patients
-                </Typography>
-            </CardContent>
-        </CardActionArea>
-    </Card>
-        );
-}
+      <MaterialTable
+      style={{
+        position: "absolute",
+        left: "21.88%",
+        right: "2.03%",
+        top: "66.39%",
+        bottom: "3.33%",
+      }}
+        title="Patients"
+        columns={[
+            { title: 'Name', field: 'name' },
+            { title: 'Last Login', field: 'activity' },
+            { title: 'PatientID', field: 'patient_id', type: 'numeric' },
+            { title: 'Dues', field: 'patient_dues', type: 'numeric' },
+          ]}
+        data={[
+            { name: 'yeah boy', activity: '14/04/20', patient_id: '0001', patient_dues: '$200'},
+            { name: 'Erin Levin', activity: '17/04/20', patient_id: '0002', patient_dues: '$300'}
+        ]}
+        options={{
+            selection: true,
+            rowStyle: rowData => ({ backgroundColor: rowData.tableData.checked ? '#37b15933' : '' }),
+            paging: false,
+        }}
+        icons={tableIcons}
+        
+        actions={[
+            {
 
-export function StarIcon() {
-    const classes = useStyles();
-    return (
-    <Card className={classes.iconsize}>
-        <CardActionArea>
-            <StarIcon className={classes.iconsize}>
-               
-            </StarIcon>
-            <CardContent>
-            <Typography>
-            Add New Patient
-                </Typography>
-            </CardContent>
-        </CardActionArea>
-    </Card>
+            }
+        ]}
+      />
         );
 }
 
 export function ButtonMessage() {
     const classes = useStyles();
     return (
-    <Card className={classes.buttonMessage}>
-        <CardActionArea>
-            <CardContent>
-            <Typography style={{textTransform: "uppercase", border: "none", fontWeight: "bold"}}>
+    <Button className={classes.buttonWhiteFont}>
+            <Typography variant="h6" style={{textTransform: "uppercase", border: "none", fontWeight: "bold"}}>
             Message
-                </Typography>
-            </CardContent>
-        </CardActionArea>
-    </Card>
+            </Typography>
+    </Button>
         );
 }
 
 export function ButtonBroadcast() {
     const classes = useStyles();
     return (
-    <Card className={classes.buttonBroadcast}>
-        <CardActionArea>
-            <CardContent>
-            <Typography style={{textTransform: "uppercase", border: "none", fontWeight: "bold"}}>
+    <Button className={classes.buttonWhiteFont} style={{marginLeft: "7.3%", paddingRight:"0%"}}>
+            <Typography variant="h6" style={{border: "none", fontWeight: "bold"}}>
             Broadcast
-                </Typography>
-            </CardContent>
-        </CardActionArea>
-    </Card>
+            </Typography>
+    </Button>
         );
 }
 
 export function ButtonView() {
     const classes = useStyles();
     return (
-    <Card className={classes.buttonView}>
-        <CardActionArea>
-            <CardContent>
-            <Typography style={{textTransform: "uppercase", border: "none", fontWeight: "bold"}}>
+    <Button className={classes.buttonWhiteFont} style={{marginLeft: "14%", paddingRight:"0%"}}>
+            <Typography variant="h6" style={{textTransform: "uppercase", border: "none", fontWeight: "bold"}}>
             View
-                </Typography>
-            </CardContent>
-        </CardActionArea>
-    </Card>
+            </Typography>
+    </Button>
         );
 }
+
