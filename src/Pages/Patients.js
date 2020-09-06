@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React from 'react'
 import MaterialTable from 'material-table';
 import { Container, Typography, Button, TextField} from "@material-ui/core";
@@ -181,11 +182,22 @@ const useStyles = makeStyles({
   
   }
 
+=======
+import React from "react";
+import Button from "@material-ui/core/Button";
+import PeopleIcon from "@material-ui/icons/People";
+import { makeStyles } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
+
+const useStyles = makeStyles({
+  root: {},
+>>>>>>> dev-update
 });
 
 export default function Patients() {
   const classes = useStyles();
   return (
+<<<<<<< HEAD
     <React.Fragment>
     <div>
     <Container className={classes.picturePlace}>
@@ -422,3 +434,13 @@ export function ButtonView() {
         );
 }
 
+=======
+    <div className={classes.root}>
+      <Typography variant="h4" gutterBottom>
+        Patients
+      </Typography>
+      <Typography variant="h6">Content</Typography>
+    </div>
+  );
+}
+>>>>>>> dev-update
