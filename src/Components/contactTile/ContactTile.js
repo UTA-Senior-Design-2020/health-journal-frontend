@@ -29,15 +29,15 @@ const useStyles = makeStyles({
       letterSpacing: '0.15px',
       color: TextColor
     }),
-    itemText: ({
+    itemText: ({SubtitleColor})  => ({
         fontSize: '14px', 
-        color: 'rgba(255, 255, 255, 0.54)'
+        color: SubtitleColor
     })
   });
 
-export default function ContactTile({PatientName, PhoneNumber, AppointmentStartTime, TextColor})
+export default function ContactTile({PatientName, PhoneNumber, AppointmentStartTime, TextColor, SubtitleColor})
 {
-    const classes = useStyles({TextColor});
+    const classes = useStyles({TextColor, SubtitleColor});
     return (
     <Grid container spacing={2}>
         <Grid item>
@@ -63,7 +63,7 @@ export default function ContactTile({PatientName, PhoneNumber, AppointmentStartT
                 </Grid>
             </Grid>
         </Grid>
-        <IconButton style={{marginLeft: '.05em', color: 'rgba(255, 255, 255, 0.54'}}><MoreVertIcon/></IconButton>
+        <IconButton style={{marginLeft: '.05em', color: {SubtitleColor}}}><MoreVertIcon/></IconButton>
         
     </Grid>
     )

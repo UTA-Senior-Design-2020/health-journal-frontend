@@ -51,14 +51,14 @@ const useStyles = makeStyles({
 });
 
 
-export default function ClientCard({CardTitle, BackgroundColor, TextColor, PatientName, PhoneNumber, AppointmentStartTime})
+export default function ClientCard({CardTitle, BackgroundColor, SubtitleColor, TextColor, PatientName, PhoneNumber, AppointmentStartTime})
 { 
   const classes = useStyles({BackgroundColor, TextColor});
   return (
   <Card className={classes.root}>
     <Typography variant="h5" style={{paddingTop: '30px', paddingLeft:'20px'}}>{CardTitle}</Typography>
     <CardContent>
-        <ContactTile  PatientName={PatientName} PhoneNumber={PhoneNumber} AppointmentStartTime={AppointmentStartTime}/>
+        <ContactTile  PatientName={PatientName} PhoneNumber={PhoneNumber} AppointmentStartTime={AppointmentStartTime} SubtitleColor={SubtitleColor} TextColor={TextColor}/>
     </CardContent>
   </Card>);
 }

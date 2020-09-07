@@ -27,8 +27,8 @@ export default function Dashboard() {
         <DashBoardAlertsCard cardName="Patients" amount="8" icon={PeopleIcon} />
         <DashBoardAlertsCard cardName="Reports" amount="4" icon={AlertIcon} />
       </div>
-      <ClientCard CardTitle="Current Client" BackgroundColor="#2196F3" TextColor="#FFFFFF" PatientName="Nicci Troiani" PhoneNumber="(555)-555-5555" AppointmentStartTime="2:45 PM"/>
-      <ClientCard CardTitle="Upcoming" BackgroundColor="#FFFFFF" TextColor="rgba(0, 0, 0, 0.87)" PatientName="Nicci Troiani" PhoneNumber="(555)-555-5555" AppointmentStartTime="2:45 PM"/>
+      <ClientCard CardTitle="Current Client" BackgroundColor="#2196F3" SubtitleColor="rgba(255, 255, 255, 0.54)" TextColor="#FFFFFF" PatientName="Nicci Troiani" PhoneNumber="(555)-555-5555" AppointmentStartTime="2:45 PM"/>
+      <ClientCard CardTitle="Upcoming" BackgroundColor="#FFFFFF" SubtitleColor="rgba(0, 0, 0, 0.54)" TextColor="rgba(0, 0, 0, 0.87)" PatientName="Nicci Troiani" PhoneNumber="(555)-555-5555" AppointmentStartTime="2:45 PM"/>
     </div>
   );
 }
