@@ -34,9 +34,10 @@ export default function ClientCard({CardTitle, BackgroundColor, SubtitleColor, T
   <Card className={classes.root}>
     <Typography variant="h5" style={{paddingTop: '30px', paddingLeft:'20px'}}>{CardTitle}</Typography>
     <CardContent>
-        {PatientName.map(name => (
+        {
+            Array.isArray(PatientName) ? PatientName.map(name => (
             <ContactTile  PatientName={name} PhoneNumber={PhoneNumber} AppointmentStartTime={AppointmentStartTime} SubtitleColor={SubtitleColor} TextColor={TextColor}/>
-        ))}
+        )): <ContactTile  PatientName={PatientName} PhoneNumber={PhoneNumber} AppointmentStartTime={AppointmentStartTime} SubtitleColor={SubtitleColor} TextColor={TextColor}/>}
         
     </CardContent>
   </Card>);

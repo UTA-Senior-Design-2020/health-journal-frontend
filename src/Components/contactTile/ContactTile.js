@@ -63,7 +63,7 @@ export default function ContactTile({PatientName, PhoneNumber, AppointmentStartT
                 </Grid>
             </Grid>
         </Grid>
-        <IconButton style={{marginLeft: '.05em', color: {SubtitleColor}}}><MoreVertIcon/></IconButton>
+        <IconButton style={{marginLeft: '0em', color: {SubtitleColor}}}><MoreVertIcon/></IconButton>
         
     </Grid>
     )
