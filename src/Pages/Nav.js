@@ -26,6 +26,9 @@ import ListIcon from "@material-ui/icons/List";
 import MailIcon from "@material-ui/icons/Mail";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import PeopleIcon from "@material-ui/icons/People";
+import Avatar from '@material-ui/core/Avatar';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import Grid from '@material-ui/core/Grid';
 
 import { Link } from "react-router-dom";
 
@@ -93,8 +96,22 @@ function Nav(props) {
         anchor="left"
       >
         <div className={classes.userInfo}>
-          <div></div>
-          <Typography variant="h5">Dr. Young</Typography>
+        <Grid container spacing={2} alignItems="center">
+          <Grid item>
+              <Avatar alt="Dr. Young">
+                  <AccountCircleIcon />
+              </Avatar>
+          </Grid>
+          <Grid item xs={12} sm container>
+              <Grid item xs container direction="row" spacing={2}>
+                  <Grid item xs>
+                      <Typography variant="h5">
+                          Dr. Young
+                      </Typography>
+                  </Grid>
+              </Grid>
+          </Grid>
+        </Grid>
         </div>
         <Divider />
         <List>
