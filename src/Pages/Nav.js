@@ -22,20 +22,21 @@ import {
   ListItemText,
 } from "@material-ui/core";
 import HomeIcon from "@material-ui/icons/Home";
-import ListIcon from "@material-ui/icons/List";
+import AssignmentIcon from '@material-ui/icons/Assignment';
 import MailIcon from "@material-ui/icons/Mail";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import PeopleIcon from "@material-ui/icons/People";
 import Avatar from '@material-ui/core/Avatar';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import Grid from '@material-ui/core/Grid';
+import MessageIcon from '@material-ui/icons/Message';
 
 import { Link } from "react-router-dom";
 
 const navList = [
   { name: "Dashboard", icon: HomeIcon, to: "/" },
-  { name: "Messages", icon: MailIcon, to: "/messages" },
-  { name: "Tasks", icon: ListIcon, to: "/tasks" },
+  { name: "Messages", icon: MessageIcon, to: "/messages" },
+  { name: "Tasks", icon: AssignmentIcon, to: "/tasks" },
   { name: "Patients", icon: PeopleIcon, to: "/patients" },
 ];
 
@@ -71,6 +72,14 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.default,
     padding: theme.spacing(3),
   },
+  list: {
+    '&:hover': {
+      backgroundColor: '#E3F2FD'
+    },
+    '&:hover $child':{
+      color: '#2196F3'
+    }
+  }
 }));
 
 function Nav(props) {
@@ -123,10 +132,11 @@ function Nav(props) {
                 key={navItem.name}
                 component="a"
                 href={navItem.to}
+                className={classes.list}
               >
                 <ListItemIcon>
                   <Link to={navItem.to}>
-                    <Icon color="primary" />
+                    <Icon style={{color:"rgba(0, 0, 0, 0.54)"}} />
                   </Link>
                 </ListItemIcon>
                 <ListItemText primary={navItem.name} />
@@ -137,7 +147,7 @@ function Nav(props) {
         <Divider />
         <List>
           {["All mail", "Trash", "Spam"].map((text, index) => (
-            <ListItem button key={text}>
+            <ListItem className={classes.list} button key={text}>
               <ListItemIcon>
                 {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
               </ListItemIcon>
@@ -145,6 +155,8 @@ function Nav(props) {
             </ListItem>
           ))}
         </List>
+        <Divider />
+        <RecentlySeen />
       </Drawer>
       <main className={classes.content}>
         {/* Used to move content below top app bar */}
@@ -154,5 +166,6 @@ function Nav(props) {
     </div>
   );
 }
+
 
 export default Nav;
