@@ -1,21 +1,22 @@
 import React from 'react'
-import MaterialTable from 'material-table';
-import { Container, Typography, Button, TextField} from "@material-ui/core";
-import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardContent from '@material-ui/core/CardContent';
-import { makeStyles } from "@material-ui/core/styles";
-import StarsIcon from '@material-ui/icons/Stars';
+import Tab from '@material-ui/core/Tab';
+import Tabs from '@material-ui/core/Tabs';
+import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import AppBar from '@material-ui/core/AppBar';
+import MaterialTable from 'material-table';
+import PropTypes from 'prop-types';
+import Toolbar from '@material-ui/core/Toolbar';
+import { forwardRef } from 'react';
+import { Container, Typography, Button, TextField, InputBase} from "@material-ui/core";
+import { fade, makeStyles, ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
+import StarsIcon from '@material-ui/icons/Stars';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import SearchIcon from '@material-ui/icons/Search';
-import { forwardRef } from 'react';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
-import PropTypes from 'prop-types';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Box from '@material-ui/core/Box';
 
 // following imports are for Material-Table
 import AddBox from '@material-ui/icons/AddBox';  
@@ -33,6 +34,8 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
+
+const theme = createMuiTheme();
 
 // CSS Should be done this way
 const useStyles = makeStyles({
@@ -147,6 +150,48 @@ const useStyles = makeStyles({
       /* Primary / 500 - Accent */
       color: "#2196F3",
   },
+  search: {
+      position: 'relative',
+      //left: "83%",
+      marginTop: "1%",
+      borderRadius: theme.shape.borderRadius,
+      backgroundColor: fade("rgba(200, 200, 200, 0.76)", 0.15),
+      '&:hover': {
+        backgroundColor: fade("rgba(200, 200, 200, 0.76)", 0.25),
+      },
+      marginLeft: 0,
+      width: '100%',
+      [theme.breakpoints.up('sm')]: {
+        marginLeft: theme.spacing(1),
+        width: 'auto',
+      },
+      marginRight: theme.spacing(2)
+  },
+  searchIcon: {
+      padding: theme.spacing(0, 2),
+      height: '100%',
+      position: 'absolute',
+      pointerEvents: 'none',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+  },
+  inputRoot: {
+      color: 'inherit',
+  },
+  inputInput: {
+      padding: theme.spacing(1, 1, 1, 0),
+      // vertical padding + font size from searchIcon
+      paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+      transition: theme.transitions.create('width'),
+      width: '100%',
+      [theme.breakpoints.up('sm')]: {
+        width: '12ch',
+        '&:focus': {
+          width: '20ch',
+        },
+      },
+  },
 });
 
 export default function Patients() {
@@ -155,8 +200,11 @@ export default function Patients() {
     <React.Fragment>
     <SideBox />
     <PatientBox />
-    <TopBar />
-    <SearchBox />
+    {//<TopBar /> 
+    }
+    <TopAppBar />
+    {//<SearchBox />
+}
     <PatientsList />
     <PatientPic />
     <ButtonMessage />
@@ -166,6 +214,63 @@ export default function Patients() {
     <ButtonSkype />
     </React.Fragment>
   );
+}
+
+/*
+export function TopBar() { // todo replace with material ui App Bar
+    const classes = useStyles();
+    return (
+      <Card className={classes.topBar}>
+        <Button style={{marginTop: "1.75%", marginLeft: "1.75%"}}
+        variant="contained"
+        color="default"
+        className={classes.button}
+        startIcon={<StarsIcon />}
+        >
+            Add New Patient
+        </Button>
+        <Button style={{marginLeft:"82%", marginTop: "2%"}}
+        color="default"
+        startIcon={<ExitToAppIcon />}
+        size="large"
+        >
+        </Button>
+      </Card>
+    );
+}
+*/
+
+export function TopAppBar() {
+    const classes = useStyles();
+    return (
+        <div className={classes.topBar}>
+          <AppBar position="static" color="" style={{height: "98%"}}>
+            <Toolbar>
+              <Button style={{marginTop: ".9%", marginLeft: "1%", display: "block",}}
+                variant="contained"
+                color="default"
+                className={classes.button}
+                startIcon={<StarsIcon />}
+                >
+                Add New Patient
+              </Button>
+              <div className={classes.search}>
+                <div className={classes.searchIcon}>
+                  <SearchIcon />
+                </div>
+                <InputBase
+                  placeholder="Search"
+                  classes={{
+                    root: classes.inputRoot,
+                    input: classes.inputInput,
+                  }}
+                  inputProps={{'aria-label': 'search'}}
+                />
+              </div>
+            </Toolbar>
+          </AppBar>
+        </div>
+    )
 }
 
 export function PatientPic() {
@@ -222,9 +327,9 @@ export function ButtonMessage() {
     const classes = useStyles();
     return (
     <Button className={classes.buttonWhiteFont}>
-            <Typography variant="h6" style={{textTransform: "uppercase", border: "none", fontWeight: "bold"}}>
+        <Typography variant="h6" style={{border: "none", fontWeight: "bold"}}>
             Message
-            </Typography>
+        </Typography>
     </Button>
         );
 }
@@ -233,9 +338,9 @@ export function ButtonBroadcast() {
     const classes = useStyles();
     return (
     <Button className={classes.buttonWhiteFont} style={{marginLeft: "7.3%", paddingRight:"0%"}}>
-            <Typography variant="h6" style={{border: "none", fontWeight: "bold"}}>
+        <Typography variant="h6" style={{border: "none", fontWeight: "bold"}}>
             Broadcast
-            </Typography>
+        </Typography>
     </Button>
         );
 }
@@ -244,9 +349,9 @@ export function ButtonView() {
     const classes = useStyles();
     return (
     <Button className={classes.buttonWhiteFont} style={{marginLeft: "14%", paddingRight:"0%"}}>
-            <Typography variant="h6" style={{textTransform: "uppercase", border: "none", fontWeight: "bold"}}>
+        <Typography variant="h6" style={{border: "none", fontWeight: "bold"}}>
             View
-            </Typography>
+        </Typography>
     </Button>
         );
 }
@@ -303,27 +408,6 @@ export function ButtonSkype() {
     );
 }
 
-export function TopBar() { // todo replace with material ui App Bar
-    const classes = useStyles();
-    return (
-      <Card className={classes.topBar}>
-        <Button style={{marginTop: "1.75%", marginLeft: "1.75%"}}
-        variant="contained"
-        color="default"
-        className={classes.button}
-        startIcon={<StarsIcon />}
-        >
-            Add New Patient
-        </Button>
-        <Button style={{marginLeft:"82%", marginTop: "2%"}}
-        color="default"
-        startIcon={<ExitToAppIcon />}
-        size="large"
-        >
-        </Button>
-      </Card>
-    );
-}
 
 export function SearchBox() {
     const classes = useStyles();
