@@ -1,0 +1,10 @@
+.icon{
+    display:inline-block;
+    margin-left:10px;
+}
+
+.title{
+    display:inline-block;
+    margin-left:30px;
+    font-size: large;
+}
