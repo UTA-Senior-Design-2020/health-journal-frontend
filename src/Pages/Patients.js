@@ -1,21 +1,22 @@
 import React from 'react'
-import MaterialTable from 'material-table';
-import { Container, Typography, Button, TextField} from "@material-ui/core";
-import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardContent from '@material-ui/core/CardContent';
-import { makeStyles } from "@material-ui/core/styles";
-import StarsIcon from '@material-ui/icons/Stars';
+import Tab from '@material-ui/core/Tab';
+import Tabs from '@material-ui/core/Tabs';
+import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import AppBar from '@material-ui/core/AppBar';
+import MaterialTable from 'material-table';
+import PropTypes from 'prop-types';
+import Toolbar from '@material-ui/core/Toolbar';
+import { forwardRef } from 'react';
+import { Container, Typography, Button, TextField, InputBase} from "@material-ui/core";
+import { fade, makeStyles, ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
+import StarsIcon from '@material-ui/icons/Stars';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import SearchIcon from '@material-ui/icons/Search';
-import { forwardRef } from 'react';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
-import PropTypes from 'prop-types';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Box from '@material-ui/core/Box';
 
 // following imports are for Material-Table
 import AddBox from '@material-ui/icons/AddBox';  
@@ -34,6 +35,8 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 
+const theme = createMuiTheme();
+
 // CSS Should be done this way
 const useStyles = makeStyles({
   root: {
@@ -42,7 +45,7 @@ const useStyles = makeStyles({
   blueBox: { // Nicci Triani
       position: "absolute",
       //left: "21.88%",
-      left: "15%",
+      marginLeft: "0.75%",
       //right: "25.41%",
       top: "11.11%",
       bottom: "66.94%",
@@ -64,30 +67,35 @@ const useStyles = makeStyles({
       
       color: "#FFFFFF",
   },
-  sideBox: { // Add stuff here for idk what.
+  patientPic: {
       position: "absolute",
-      left: "77.19%",
-      //right: "2.19%",
-      top: "11.11%",
-      bottom: "66.94%",
-      
-      background: "#FAFAFA",
-      width: "20.63%",
-      height: "21.94%",
+      marginLeft: "-1%",
+      marginTop: "-1%",
+      height: "105%",
+      width: "auto",  // not sure if this does anything, but will leave in for now
+      borderRadius: "2px 0px 0px 2px", 
+      boxShadow: "5px 0px 4px rgba(0,0,0,2)",
+  },
+  timeIcon: {
+      position: "absolute",
+      marginLeft: "80.8%",
+      marginTop: "2.61%",
+      color: "rgba(255, 255, 255, 0.76)",
+      fontSize: "150%"
   },
   topBar: { // Add New Patient
       position: "absolute",
-      left: "12.9%",
+      marginLeft: "-1.4%",
       top: "0%",
-      bottom: "0%",
-      width: "87.1%",
+      width: "87.1%", 
+      //width: "undefined",
       height: "8.75%",
+
   },
   searchBox: { // Search 
       position: "absolute",
       left: "77.19%",
       top: "1.5%",
-      //width: "18.13%",
       width: "12%",
       height: "5.56%",
       /* Background / Dark */
@@ -106,7 +114,7 @@ const useStyles = makeStyles({
       /* Button */
       position: "absolute",
       textAlign: "center",
-      left: "55.23%",
+      marginLeft: "43.23%",
       top: "27.6%",
       
       height:"5%",
@@ -125,27 +133,46 @@ const useStyles = makeStyles({
       background: "#2196F3",
       color: "#FFFFFF",
   },
-//blue buttons
-  buttonBlueFont: {
-      position: "absolute",
-      top: "27.6%",
-      left: "78.75%",
-      height: "5%",
-      
-      /* BUTTON - med 14 (16px, 1.25px) */
-      fontFamily: "Roboto",
-      fontStyle: "normal",
-      fontHeight: "500",
-      fontSize: "14px",
-      lineHeight: "16px",
-      
-      /* identical to box height, or 114% */
-      textAlign: "center",
-      letterSpacing: "1.25px",
-      textTransform: "uppercase",
-
-      /* Primary / 500 - Accent */
-      color: "#2196F3",
+  search: {
+      position: 'relative',
+      marginTop: "1%",
+      borderRadius: theme.shape.borderRadius,
+      backgroundColor: fade("rgba(200, 200, 200, 0.76)", 0.15),
+      '&:hover': {
+        backgroundColor: fade("rgba(200, 200, 200, 0.76)", 0.25),
+      },
+      marginLeft: 0,
+      width: '100%',
+      [theme.breakpoints.up('sm')]: {
+        marginLeft: theme.spacing(1),
+        width: 'auto',
+      },
+      marginRight: theme.spacing(2)
+  },
+  searchIcon: {
+      padding: theme.spacing(0, 2),
+      height: '100%',
+      position: 'absolute',
+      pointerEvents: 'none',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+  },
+  inputRoot: {
+      color: 'inherit',
+  },
+  inputInput: {
+      padding: theme.spacing(1, 1, 1, 0),
+      // vertical padding + font size from searchIcon
+      paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+      transition: theme.transitions.create('width'),
+      width: '100%',
+      [theme.breakpoints.up('sm')]: {
+        width: '16ch',
+        '&:focus': {
+          width: '16ch', // when this is > 16 for transition effect, formatting of App Bar gets messed up.
+        },
+      },
   },
 });
 
@@ -153,35 +180,53 @@ export default function Patients() {
   const classes = useStyles();
   return (
     <React.Fragment>
-    <SideBox />
     <PatientBox />
-    <TopBar />
-    <SearchBox />
+    <TopAppBar />
     <PatientsList />
-    <PatientPic />
     <ButtonMessage />
-    <ButtonBroadcast />
+    <ButtonCall />
     <ButtonView />
     <ButtonCall />
-    <ButtonSkype />
     </React.Fragment>
   );
 }
 
-export function PatientPic() {
+// put back log out button top right
+export function TopAppBar() {
     const classes = useStyles();
     return (
-        <div>
-        <img src={require('./patient_pic.png')} 
-            style={{
-                position: "absolute",
-                left: "15%",
-                top: "11.22%",
-                width: "19.7%",
-                height: "21.67%", 
-                borderRadius: "2px 0px 0px 2px", 
-                boxShadow: "5px 0px 4px rgba(0,0,0,2)",
-                }}/>
+        <div className={classes.topBar}>
+          <AppBar position="static" color="" style={{height: "98%"}}>
+            <Toolbar>
+              <Button style={{marginTop: ".9%", marginLeft: "1%", display: "block",}}
+                variant="contained"
+                color="default"
+                className={classes.button}
+                startIcon={<StarsIcon />}
+                >
+                Add New Patient
+              </Button>
+              <div className={classes.search}>
+                <div className={classes.searchIcon}>
+                  <SearchIcon />
+                </div>
+                <InputBase
+                  placeholder="Search"
+                  classes={{
+                    root: classes.inputRoot,
+                    input: classes.inputInput,
+                  }}
+                  inputProps={{'aria-label': 'search'}}
+                />
+              </div> 
+                <Button style={{marginLeft: "70%",}}
+                color="default"
+                startIcon={<ExitToAppIcon />}
+                size="large"
+                >
+                </Button>
+            </Toolbar>
+          </AppBar>
         </div>
     )
 }
@@ -193,25 +238,42 @@ export function PatientBox() {
         <CardContent>
           <Grid container spacing={3}>
             {/* grid here? */}
-            <Typography variant="h4" style={{position: "absolute", paddingLeft:"34.96%", paddingTop: "1.94%", fontWeight:"bold"}}>
-                Nicci Triani
-            </Typography>
-            <Typography variant="h6" style={{position: "absolute", paddingLeft:"34.96%", paddingTop: "8.47%"}}>
-                Last Seen: 1/2/20 <br />Next Appointment: 8/8/20
-            </Typography>
-            <Typography variant="h6" style={{paddingLeft:"34.96%", paddingTop: "15.78%", fontSize:"70%", textTransform: "uppercase", color: "rgba(255, 255, 255, 0.76)"}}>
-                NicciTriani@gmail.com <br />(555) 555-5555
-            </Typography>
-            <Typography variant="h6" style={{position: "absolute", paddingLeft:"84.5%", paddingTop: "2.36%", fontSize:"72%", color: "rgba(255, 255, 255, 0.76)"}}>
-                Currently Patient <br /> HH:MM DD/MM/YY
-            </Typography>
-            <AccessTimeIcon style={{
-                position: "absolute",
-                marginLeft: "80.8%",
-                marginTop: "2.61%",
-                color: "rgba(255, 255, 255, 0.76",
-                fontSize: "150%"}}
-            />
+            <div>
+            <img src={require('./patient_pic.png')} 
+            style={{
+              position: "absolute",
+              marginLeft: "-1%",
+              marginTop: "-1%",
+              height: "106%",
+              width: "auto",  // not sure if this does anything, but will leave in for now
+              borderRadius: "2px 0px 0px 2px", 
+              boxShadow: "5px 0px 4px rgba(0,0,0,2)",
+              }}/>
+            </div>
+            <div style={{marginLeft: "34.96%"}}>
+              <Typography variant="h4" style={{position: "absolute", paddingTop: "1.9%", fontWeight:"bold"}}>
+                  Nicci Triani
+              </Typography>
+              <Typography variant="h6" style={{position: "absolute", paddingTop: "8.47%"}}>
+                  Last Seen: 1/2/20
+              </Typography>
+              <Typography variant="h6" style={{position: "absolute", paddingTop: "11%"}}>
+                  Next Appointment: 8/8/20
+              </Typography>
+              <Typography variant="h6" style={{position: "absolute", paddingTop: "15.78%", fontSize:"70%", textTransform: "uppercase", color: "rgba(255, 255, 255, 0.76)"}}>
+                  NicciTriani@gmail.com
+              </Typography>
+              <Typography variant="h6" style={{position: "absolute", paddingTop: "17.78%", fontSize:"70%", color: "rgba(255, 255, 255, 0.76)"}}>
+                  (555) 555-5555
+              </Typography>
+              <Typography variant="h6" style={{position: "absolute", paddingLeft:"49.54%", paddingTop: "2.36%", fontSize:"72%", color: "rgba(255, 255, 255, 0.76)"}}>
+                  Currently Patient
+              </Typography>
+              <Typography variant="h6" style={{position: "absolute", paddingLeft:"49.54%", paddingTop: "4.36%", fontSize:"72%", color: "rgba(255, 255, 255, 0.76)"}}>
+                  HH:MM DD/MM/YY
+              </Typography>    
+            </div>
+            <AccessTimeIcon className={classes.timeIcon}/>
           </Grid>
         </CardContent>
       </Card>
@@ -222,20 +284,20 @@ export function ButtonMessage() {
     const classes = useStyles();
     return (
     <Button className={classes.buttonWhiteFont}>
-            <Typography variant="h6" style={{textTransform: "uppercase", border: "none", fontWeight: "bold"}}>
+        <Typography variant="h6" style={{border: "none", fontWeight: "bold"}}>
             Message
-            </Typography>
+        </Typography>
     </Button>
         );
 }
 
-export function ButtonBroadcast() {
+export function ButtonCall() {
     const classes = useStyles();
     return (
-    <Button className={classes.buttonWhiteFont} style={{marginLeft: "7.3%", paddingRight:"0%"}}>
-            <Typography variant="h6" style={{border: "none", fontWeight: "bold"}}>
-            Broadcast
-            </Typography>
+    <Button className={classes.buttonWhiteFont} style={{marginLeft: "49.5%"}}>
+        <Typography variant="h6" style={{border: "none", fontWeight: "bold"}}>
+            Call
+        </Typography>
     </Button>
         );
 }
@@ -243,88 +305,14 @@ export function ButtonBroadcast() {
 export function ButtonView() {
     const classes = useStyles();
     return (
-    <Button className={classes.buttonWhiteFont} style={{marginLeft: "14%", paddingRight:"0%"}}>
-            <Typography variant="h6" style={{textTransform: "uppercase", border: "none", fontWeight: "bold"}}>
+    <Button className={classes.buttonWhiteFont} style={{marginLeft: "55%"}}>
+        <Typography variant="h6" style={{border: "none", fontWeight: "bold"}}>
             View
-            </Typography>
+        </Typography>
     </Button>
         );
 }
-
-export function SideBox() {
-    const classes = useStyles();
-    return (
-      <Card className={classes.sideBox}>
-        <CardActionArea>
-          <CardContent>
-            <Typography variant="h6" 
-            style={{fontFamily: "Roboto",
-            fontStyle: "normal",
-            fontWeight: "normal",
-            fontSize: "14px",
-            lineHeight: "20px",
-            /* or 133% */
-            letterSpacing: "0.4px",
-            
-            color: "#000000",
-            paddingLeft:"15px",
-            //mix-blend-mode: normal;
-            opacity: "0.6",}}>
-                Something
-            </Typography>
-            <Typography variant="h5" style={{paddingLeft:"15px"}}>
-                Add stuff here for idk what
-            </Typography>
-          </CardContent>
-        </CardActionArea>
-      </Card>
-    );
-}
-
-export function ButtonCall() { // needs icon
-    const classes = useStyles();
-    return (
-      <Button className={classes.buttonBlueFont}>
-        <Typography variant="h5" >
-              Call
-        </Typography>
-      </Button>
-    );
-}
-
-export function ButtonSkype() {
-    const classes = useStyles();
-    return (
-      <Button className={classes.buttonBlueFont} style={{marginLeft: "5.21%"}}>
-        <Typography variant="h5" >
-               Skype
-        </Typography>
-      </Button>
-    );
-}
-
-export function TopBar() { // todo replace with material ui App Bar
-    const classes = useStyles();
-    return (
-      <Card className={classes.topBar}>
-        <Button style={{marginTop: "1.75%", marginLeft: "1.75%"}}
-        variant="contained"
-        color="default"
-        className={classes.button}
-        startIcon={<StarsIcon />}
-        >
-            Add New Patient
-        </Button>
-        <Button style={{marginLeft:"82%", marginTop: "2%"}}
-        color="default"
-        startIcon={<ExitToAppIcon />}
-        size="large"
-        >
-        </Button>
-      </Card>
-    );
-}
-
+// saving for now. might need for other place implementation?
 export function SearchBox() {
     const classes = useStyles();
     return (
@@ -344,7 +332,6 @@ export function SearchBox() {
 // for MaterialTable
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
-
     return (
         <div
           role="tabpanel"
@@ -406,14 +393,13 @@ export function PatientsList() {
     
     return (
         <div>
-        <AppBar position="static"
+        <AppBar position="static" // can AppBar height dynamically react to MaterialTable height?
         style={{
           position: "absolute",
-          left: "15%",
-          right: "2.03%",
-          top: "66.39%",
-          bottom: "3.33%",
+          marginLeft: "0.75%",
+          marginTop: "20%",
           width: "83%",
+          height: "50%",
           background: "#FFFFFF",
           color: "black",
         }} >
@@ -426,10 +412,13 @@ export function PatientsList() {
         <TabPanel value={value} index={0}>
           <MaterialTable
           style={{
-            marginTop: "49.2%",
-            zIndex: "9999", // without this, items end up behind the Tabs (?????)
+            position: "absolute",
+            marginTop: "21.3%",
+            marginLeft: "0%",
+            zIndex: "9999", // without this, items end up behind the Tabs
             border: "none",
             boxShadow: "none",
+            width: "82.3%",
           }}
             title="Patients"
             columns={[
@@ -440,7 +429,8 @@ export function PatientsList() {
               ]}
             data={[
                 { name: 'yeah boy', activity: '14/04/20', patient_id: '0001', patient_dues: '$200'},
-                { name: 'Erin Levin', activity: '17/04/20', patient_id: '0002', patient_dues: '$300'}
+                { name: 'Erin Levin', activity: '17/04/20', patient_id: '0002', patient_dues: '$300'},
+                { name: 'Test Ing', activity: '11/01/20', patient_id: '0003', patient_dues: '?'},
             ]}
             options={{
                 selection: true,
