@@ -7,6 +7,8 @@ import Patients from "./Patients";
 import Tasks from "./Tasks";
 import RecentlySeen from "./RecentlySeen";
 import Settings from "./Settings";
+import ClientCard from "../Components/clientCard/ClientCard";
+import NavCard from "../Components/navCard/navCard";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import "./Nav.css";
 import { makeStyles } from "@material-ui/core/styles";
@@ -31,7 +33,7 @@ import Avatar from '@material-ui/core/Avatar';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import Grid from '@material-ui/core/Grid';
 import MessageIcon from '@material-ui/icons/Message';
-import SettingsIcon from '@material-ui/icons/Settings';
+
 
 import { Link } from "react-router-dom";
 
@@ -165,6 +167,7 @@ function Nav(props) {
         </List>
         <Divider />
         <RecentlySeen />
+        <Settings/>
       </Drawer>
       <main className={classes.content}>
         {/* Used to move content below top app bar */}
