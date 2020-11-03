@@ -391,7 +391,7 @@ export function PatientsList() {
         setValue(newValue);
     }
     
-    return (
+    return ( 
         <div>
         <AppBar position="static" // can AppBar height dynamically react to MaterialTable height?
         style={{
@@ -409,7 +409,7 @@ export function PatientsList() {
               <Tab label="Upcoming" {...a11yProps(2)} />
             </Tabs>
         </AppBar>
-        <TabPanel value={value} index={0}>
+        <TabPanel value={value} index={0}>  {/* ALL */}
           <MaterialTable
           style={{
             position: "absolute",
@@ -424,13 +424,15 @@ export function PatientsList() {
             columns={[
                 { title: 'Name', field: 'name' },
                 { title: 'Last Login', field: 'activity' },
+                { title: 'Last Appointment', field: 'appointment_last', type: 'date'},
+                { title: 'Next Appointment', field: 'appointment_next', type: 'date'},
                 { title: 'PatientID', field: 'patient_id', type: 'numeric' },
                 { title: 'Dues', field: 'patient_dues', type: 'numeric' },
               ]}
             data={[
-                { name: 'yeah boy', activity: '14/04/20', patient_id: '0001', patient_dues: '$200'},
-                { name: 'Erin Levin', activity: '17/04/20', patient_id: '0002', patient_dues: '$300'},
-                { name: 'Test Ing', activity: '11/01/20', patient_id: '0003', patient_dues: '?'},
+                { name: 'yeah boy', activity: '04/04/20', appointment_last: '10/22/20', appointment_next: '10/23/20', patient_id: '0001', patient_dues: '$200'},
+                { name: 'Erin Levin', activity: '04/04/20', appointment_next: '10/23/20', patient_id: '0002', patient_dues: '$300'},
+                { name: 'Test Ing', activity: '11/01/20', appointment_next: '10/23/20', patient_id: '0003', patient_dues: '-'},
             ]}
             options={{
                 selection: true,
@@ -440,13 +442,41 @@ export function PatientsList() {
             icons={tableIcons}
           />
         </TabPanel>
-        <TabPanel value={value} index={1}>
-            <Typography variant="h4" style={{color: "black", position: "absolute", marginTop: "41.2%", zIndex: "9999"}}>
-                Item two
-            </Typography>
+        <TabPanel value={value} index={1}>  {/* SEEN */}
+        <MaterialTable
+          style={{
+            position: "absolute",
+            marginTop: "21.3%",
+            marginLeft: "0%",
+            zIndex: "9999", // without this, items end up behind the Tabs
+            border: "none",
+            boxShadow: "none",
+            width: "82.3%",
+          }}
+            title="Patients" // if(appointment_last within last 5 days): include patient info in table
+            columns={[ 
+                { title: 'Name', field: 'name' },
+                { title: 'Last Login', field: 'activity' },
+                { title: 'Last Appointment', field: 'appointment_last', type: 'date'},
+                { title: 'Next Appointment', field: 'appointment_next', type: 'date'},
+                { title: 'PatientID', field: 'patient_id', type: 'numeric' },
+                { title: 'Dues', field: 'patient_dues', type: 'numeric' },
+              ]}
+            data={[
+                { name: 'yeah boy', activity: '14/04/20', appointment_next: '10/23/20', patient_id: '0001', patient_dues: '$200'},
+                { name: 'Erin Levin', activity: '17/04/20', patient_id: '0002', patient_dues: '$300'},
+                { name: 'Test Ing', activity: '11/01/20', patient_id: '0003', patient_dues: '-'},
+            ]}
+            options={{
+                selection: true,
+                rowStyle: rowData => ({ backgroundColor: rowData.tableData.checked ? '#37b15933' : '' }),
+                paging: false,
+            }}
+            icons={tableIcons}
+          />
         </TabPanel>
-        <TabPanel value={value} index={2}>
-            Item thrte
+        <TabPanel value={value} index={2}> {/* UPCOMING */}
+        {/* if(appointment_next within next 24 hours): include patient info in table */}
         </TabPanel>
         </div>
         );
