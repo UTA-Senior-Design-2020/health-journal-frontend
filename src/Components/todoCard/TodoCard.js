@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useState, useEffect } from "react";
 import {Typography, CardHeader} from "@material-ui/core";
+import axios from "axios";
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import { makeStyles } from "@material-ui/core/styles";
@@ -11,6 +12,8 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
+import DoneIcon from '@material-ui/icons/Done';
 import CommentIcon from '@material-ui/icons/Comment';
 
 const useStyles = makeStyles({
@@ -35,55 +38,146 @@ const useStyles = makeStyles({
     title: {
         display: 'flex',
         alignItems: 'center'
+    },
+    task: {
+        border: '1px solid white',
+        borderradius: '5px',
+        padding: '0.5em',
+        margin: '0.5em',
+    },
+    header: {
+        margin: '0.5em',
+        fontsize: '2em',
+        textalign: 'center'
+    },
+    todoContainer: {
+        background: 'rgb(41, 33, 33)',
+        boxShadow: "0px 1px 5px rgba(0, 0, 0, 0.2), 0px 3px 4px rgba(0, 0, 0, 0.12), 0px 2px 4px rgba(0, 0, 0, 0.14)",
+        fontFamily: 'Roboto',
+        fontStyle: 'normal',
+        fontWeight: '500',
+        fontSize: '20px',
+        width: '90%',
+        borderradius: '4px',
+        padding: '20px 10px',
+        color: 'white',
+        border: '3px solid rgb(36, 110, 194)'  
+    },
+    createtask: {
+        margin: '2.5em 2em',
+        width: '80%',
+        outline: 'none',
+        border: 'none',
+        padding: '0.7em'
     }
   });
+
+  function Task({ task, index, completeTask, removeTask }) {
+    return (
+        <div
+            className="task"
+            style={{ textDecoration: task.completed ? "line-through" : "" }}
+        >
+            {task.title}
+
+            <IconButton style={{ background: "red" }} size="small" onClick={() => removeTask(index)}><DeleteIcon/></IconButton>
+            <IconButton style={{ background: "red" }} size="small" onClick={() => completeTask(index)}>
+                <DoneIcon/>
+            </IconButton>
+
+        </div>
+    );
+}
+
+function CreateTask({ addTask }) {
+    const [value, setValue] = useState("");
+    
+    const handleSubmit = e => {
+        e.preventDefault();
+        if (!value) return;
+        addTask(value);
+        setValue("");
+    }
+    return (
+        <form onSubmit={handleSubmit}>
+            <input
+                type="text"
+                className="input"
+                value={value}
+                placeholder="Add a new task"
+                onChange={e => setValue(e.target.value)}
+            />
+        </form>
+    );
+}
 
 export default function TodoCard()
 {
     const classes = useStyles();
-    const [checked, setChecked] = React.useState([0]);
+    const [tasksRemaining, setTasksRemaining] = useState(0);
+    const [patients1, setPatients] = useState({});
+    const [tasks, setTasks] = useState([
+        {
+            title: "Grab some Pizza",
+            completed: true
+        },
+        {
+            title: "Do your workout",
+            completed: true
+        },
+        {
+            title: "Hangout with friends",
+            completed: false
+        }
+    ]);
 
-    const handleToggle = (value) => () => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
+    useEffect(() => {
+        setTasksRemaining(tasks.filter(task => !task.completed).length)
+        async function getData(){
+          let {data} = await axios.get("http://localhost:5000/patients");
+          setPatients(data)
+        }
+          getData();
+      }, []) 
 
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
+    const addTask = title => {
+        const newTasks = [...tasks, { title, completed: false }];
+        setTasks(newTasks);
+    };
 
-    setChecked(newChecked);
-  };
+    const completeTask = index => {
+        const newTasks = [...tasks];
+        newTasks[index].completed = true;
+        setTasks(newTasks);
+    };
+
+    const removeTask = index => {
+        const newTasks = [...tasks];
+        newTasks.splice(index, 1);
+        setTasks(newTasks);
+    };
+
     return(
-    <Card className={classes.root}>
+    <Card className={classes.todoContainer}>
         <CardContent>
-            <Typography variant="h5" component="h1">To do</Typography>
-            <List>
-            {[0, 1, 2, 3].map((value) => {
-                const labelId = `checkbox-list-label-${value}`;
-
-                return (
-                <ListItem key={value} role={undefined} dense button onClick={handleToggle(value)}>
-                    <ListItemIcon>
-                    <Checkbox
-                        edge="start"
-                        checked={checked.indexOf(value) !== -1}
-                        tabIndex={-1}
-                        disableRipple
-                        inputProps={{ 'aria-labelledby': labelId }}
+            <Typography variant="h5" component="h1" align='center'>To do</Typography>
+            <div >
+            <div className={classes.header}>Pending tasks ({tasksRemaining})</div>
+            <div className={classes.task}>
+                {tasks.map((task, index) => (
+                    <Task
+                    task={task}
+                    index={index}
+                    completeTask={completeTask}
+                    removeTask={removeTask}
+                    key={index}
                     />
-                    </ListItemIcon>
-                    <ListItemText id={labelId} primary={`Line item ${value + 1}`} />
-                    <ListItemSecondaryAction>
-                    <IconButton edge="end" aria-label="comments">
-                        <CommentIcon />
-                    </IconButton>
-                    </ListItemSecondaryAction>
-                </ListItem>
-                    );
-                })}
-            </List>
+                ))}
+            </div>
+            <div className={classes.createtask} >
+                <CreateTask addTask={addTask} />
+            </div>
+            </div>
         </CardContent>
     </Card>
     );
