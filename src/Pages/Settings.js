@@ -1,47 +1,38 @@
 import React from 'react'
-import SettingsIcon from '@material-ui/icons/Settings';
 import {
-    AppBar,
-    Box,
-    Toolbar,
-    Typography,
-    Drawer,
-    Divider,
-    List,
     ListItem,
     ListItemIcon,
     ListItemText,
   } from "@material-ui/core";
 import { Link } from "react-router-dom";
+import { makeStyles } from "@material-ui/core/styles";
+import SettingsIcon from '@material-ui/icons/Settings';
 
 const navList = [
 { name: "Settings", icon: SettingsIcon, to: "/settings" }
 ];
 
+const useStyles = makeStyles({
+  root: {
+    marginTop: "auto"
+  },
+  title: {
+    marginLeft:"30px",
+    fontSize: "16px"
+  }
+});
 
 export default function Settings() {
-    return (
-        <div>
-            <List>
-          {navList.map((navItem) => {
-            let Icon = navItem.icon;
-            return (
-              <ListItem
-                button
-                key={navItem.name}
-                component="a"
-                href={navItem.to}
-              >
-                <ListItemIcon>
-                  <Link to={navItem.to}>
-                    <Icon style={{color:"rgba(0, 0, 0, 0.54)"}} />
-                  </Link>
-                </ListItemIcon>
-                <ListItemText primary={navItem.name} />
-              </ListItem>
-            );
-          })}
-        </List>
-        </div>
+  const classes = useStyles();  
+  return (
+      <ListItem button className={classes.root} href="/settings" component="a">
+        <ListItemIcon>
+          <Link to="/settings">
+            <SettingsIcon style={{color:"rgba(0, 0, 0, 0.54)"}} />
+          </Link>
+        </ListItemIcon>
+        <ListItemText primary="Settings" />
+      </ListItem>
+    
     )
 }
