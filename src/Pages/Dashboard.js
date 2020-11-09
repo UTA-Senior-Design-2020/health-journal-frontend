@@ -59,9 +59,9 @@ export default function Dashboard() {
       getData();
   }, []) 
 
-  for (const patient in patients1){
+  /*for (const patient in patients1){
     console.log(`${patient}: ${patients1[patient].GivenName}`)
-  }
+  }*/
   
   var patients = ['Nicci Troiani','Thom Yorke'];
   return (
@@ -74,7 +74,7 @@ export default function Dashboard() {
           <DashBoardAlertsCard  cardName="Patients" amount={patients1.length} icon={PeopleIcon} />
         </div>
         <div className={classes.alerts}>
-          <DashBoardAlertsCard cardName="Reports" amount="4" icon={AlertIcon} />
+          <DashBoardAlertsCard cardName="Notifications" amount="4" icon={AlertIcon} />
         </div>
         <div className={classes.current}>
           <ClientCard CardTitle="Current Client" BackgroundColor="#2196F3" SubtitleColor="rgba(255, 255, 255, 0.54)" TextColor="#FFFFFF" PatientName={patients} PhoneNumber="(555)-555-5555" AppointmentStartTime="2:45 PM"/>

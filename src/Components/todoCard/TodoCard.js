@@ -110,61 +110,70 @@ function CreateTask({ addTask }) {
         </form>
     );
 }
+var temp = [];
 
 export default function TodoCard()
 {
+    // TODO : CURRENTLY LOGGED IN DOCTOR
+    var doctorID = 1;
     const classes = useStyles();
     const [tasksRemaining, setTasksRemaining] = useState(0);
-    const [patients1, setPatients] = useState({});
-    const [tasks, setTasks] = useState([
-        {
-            title: "Grab some Pizza",
-            completed: true
-        },
-        {
-            title: "Do your workout",
-            completed: true
-        },
-        {
-            title: "Hangout with friends",
-            completed: false
-        }
-    ]);
-
+    const [todos, setTodos] = useState([]);
+    
     useEffect(() => {
-        setTasksRemaining(tasks.filter(task => !task.completed).length)
         async function getData(){
-          let {data} = await axios.get("http://localhost:5000/patients");
-          setPatients(data)
+          let {data} = await axios.get("http://localhost:5000/todos/" + doctorID);
+          for (const todo in data){
+            if(!data[todo].isDeleted){
+                const newTodo = [{title: data[todo].Title, completed: data[todo].Completed, doctorId: data[todo].DoctorId, todoId: data[todo].TodoId }];
+                temp.push(newTodo);
+                setTodos(newTodo);
+            }
+          }
         }
-          getData();
+        getData();
       }, []) 
+    useEffect(() => { 
+        setTasksRemaining(todos.filter(task => !task.completed).length) 
+    });
+    
+    const sendPostRequest = async (newTask) => {
+        try {
+            const resp = await axios.post('http://localhost:5000/todos', newTask);
+        } catch (err) {
+            // Handle Error Here
+            console.error(err);
+        }
+    };
 
     const addTask = title => {
-        const newTasks = [...tasks, { title, completed: false }];
-        setTasks(newTasks);
+        const newTasks = [...todos, { title, completed: false, doctorId: doctorID }];
+        const newTask = [ { doctorId: doctorID, title, completed: 0,  isDeleted: 0 }];
+        // POST request using axios inside useEffect React hook
+        sendPostRequest(newTask);
+        setTodos(newTasks);
     };
 
     const completeTask = index => {
-        const newTasks = [...tasks];
+        const newTasks = [...todos];
         newTasks[index].completed = true;
-        setTasks(newTasks);
+        setTodos(newTasks);
     };
 
     const removeTask = index => {
-        const newTasks = [...tasks];
+        const newTasks = [...todos];
         newTasks.splice(index, 1);
-        setTasks(newTasks);
+        setTodos(newTasks);
     };
 
     return(
     <Card className={classes.todoContainer}>
         <CardContent>
             <Typography variant="h5" component="h1" align='center'>To do</Typography>
-            <div >
             <div className={classes.header}>Pending tasks ({tasksRemaining})</div>
             <div className={classes.task}>
-                {tasks.map((task, index) => (
+                {console.log(todos)}
+                {todos.map((task, index) => (
                     <Task
                     task={task}
                     index={index}
@@ -172,11 +181,11 @@ export default function TodoCard()
                     removeTask={removeTask}
                     key={index}
                     />
+                    
                 ))}
             </div>
             <div className={classes.createtask} >
                 <CreateTask addTask={addTask} />
-            </div>
             </div>
         </CardContent>
     </Card>
