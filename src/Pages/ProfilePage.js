@@ -28,13 +28,16 @@ const useStyles = makeStyles((theme) => ({
 
   },
   profile: {
+    position: "absolute",
     float: "left",
-    padding: "20px"
+    padding: "100px 20px 20px 20px",
+    height: "573px"
   },
   text: {
+    position: "absolute",
     float: "left",
     padding: "20px",
-    marginLeft:"20px", 
+    marginLeft:"350px", 
     width:"280px", 
     paddingBottom:"20px"
   },
@@ -103,11 +106,19 @@ export default function ProfilePage() {
       </Card>
       <Card style={{}} className={classes.text}>
       <form noValidate autoComplete="off">
+        <TextField id="outlined-basic" label="First Name" />
+        <br />
+        <TextField id="outlined-basic" label="Last Name" />
+        <br />
         <TextField id="outlined-basic" label="Title" />
         <br />
         <TextField id="outlined-basic" label="Email" />
         <br />
-        <TextField id="outlined-basic" label="Phone Number" />
+        <TextField id="outlined-basic" label="Phone Number (Call)" />
+        <br />
+        <TextField id="outlined-basic" label="Phone Number (Text)" />
+        <br />
+        <TextField id="outlined-basic" label="Address Number" />
         <br />
         <br />
         <TextField
