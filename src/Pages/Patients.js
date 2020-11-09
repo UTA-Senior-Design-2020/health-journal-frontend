@@ -55,6 +55,7 @@ const useStyles = makeStyles({
       /* Nicci Triani */
 
       width: "61%",
+      height: "25%",
 
       fontFamily: "Roboto",
       fontStyle: "normal",
@@ -115,7 +116,7 @@ const useStyles = makeStyles({
       position: "absolute",
       textAlign: "center",
       marginLeft: "43.23%",
-      top: "27.6%",
+      top: "30.6%",
       
       height:"5%",
       width: "6%",
@@ -237,39 +238,41 @@ export function PatientBox() {
       <Card className={classes.blueBox}>
         <CardContent>
           <Grid container spacing={3}>
-            {/* grid here? */}
             <div>
             <img src={require('./patient_pic.png')} 
             style={{
               position: "absolute",
               marginLeft: "-1%",
               marginTop: "-1%",
-              height: "106%",
-              width: "auto",  // not sure if this does anything, but will leave in for now
+              height: "106%", // old: 106%
+              //width: "auto",  // not sure if this does anything, but will leave in for now
               borderRadius: "2px 0px 0px 2px", 
               boxShadow: "5px 0px 4px rgba(0,0,0,2)",
               }}/>
             </div>
-            <div style={{marginLeft: "34.96%"}}>
-              <Typography variant="h4" style={{position: "absolute", paddingTop: "1.9%", fontWeight:"bold"}}>
+            <div style={{marginLeft: "39.96%"}}>
+              <Typography variant="h4" style={{position: "relative", paddingTop: "", fontWeight:"bold", fontSize: "250%",}}>
                   Nicci Triani
               </Typography>
-              <Typography variant="h6" style={{position: "absolute", paddingTop: "8.47%"}}>
-                  Last Seen: 1/2/20
+              <Typography variant="h6" style={{position: "relative", paddingTop: "3%"}}>
+                  <Typography variant="h6" style={{ fontWeight: 'bold', display: 'inline-block'}}>Date of Birth:</Typography> 11/02/2020
               </Typography>
-              <Typography variant="h6" style={{position: "absolute", paddingTop: "11%"}}>
-                  Next Appointment: 8/8/20
+              <Typography variant="h6" style={{position: "relative", paddingTop: "%"}}>
+                  <Typography variant="h6" style={{ fontWeight: 'bold', display: 'inline-block'}}>Address:</Typography> 42 Wallaby Way, Sydney, TX 76013
               </Typography>
-              <Typography variant="h6" style={{position: "absolute", paddingTop: "15.78%", fontSize:"70%", textTransform: "uppercase", color: "rgba(255, 255, 255, 0.76)"}}>
+              <Typography variant="h6" style={{position: "relative", paddingTop: "%"}}>
+                  <Typography variant="h6" style={{ fontWeight: 'bold', display: 'inline-block'}}>Primary Care Physician:</Typography> Dr. Beats 
+              </Typography>
+              <Typography variant="h6" style={{position: "relative", paddingTop: "%", fontSize:"70%", textTransform: "uppercase", color: "rgba(255, 255, 255, 0.76)"}}>
                   NicciTriani@gmail.com
               </Typography>
-              <Typography variant="h6" style={{position: "absolute", paddingTop: "17.78%", fontSize:"70%", color: "rgba(255, 255, 255, 0.76)"}}>
+              <Typography variant="h6" style={{position: "relative", paddingTop: "%", fontSize:"70%", color: "rgba(255, 255, 255, 0.76)"}}>
                   (555) 555-5555
               </Typography>
-              <Typography variant="h6" style={{position: "absolute", paddingLeft:"49.54%", paddingTop: "2.36%", fontSize:"72%", color: "rgba(255, 255, 255, 0.76)"}}>
+              <Typography variant="h6" style={{position: "absolute", marginLeft:"44%", marginTop: "-18%", fontSize:"72%", color: "rgba(255, 255, 255, 0.76)"}}>
                   Currently Patient
               </Typography>
-              <Typography variant="h6" style={{position: "absolute", paddingLeft:"49.54%", paddingTop: "4.36%", fontSize:"72%", color: "rgba(255, 255, 255, 0.76)"}}>
+              <Typography variant="h6" style={{position: "absolute", marginLeft:"44%", marginTop: "-16%", fontSize:"72%", color: "rgba(255, 255, 255, 0.76)"}}>
                   HH:MM DD/MM/YY
               </Typography>    
             </div>
@@ -391,13 +394,13 @@ export function PatientsList() {
         setValue(newValue);
     }
     
-    return (
+    return ( 
         <div>
         <AppBar position="static" // can AppBar height dynamically react to MaterialTable height?
         style={{
           position: "absolute",
           marginLeft: "0.75%",
-          marginTop: "20%",
+          marginTop: "25%",
           width: "83%",
           height: "50%",
           background: "#FFFFFF",
@@ -409,11 +412,11 @@ export function PatientsList() {
               <Tab label="Upcoming" {...a11yProps(2)} />
             </Tabs>
         </AppBar>
-        <TabPanel value={value} index={0}>
+        <TabPanel value={value} index={0}>  {/* ALL */}
           <MaterialTable
           style={{
             position: "absolute",
-            marginTop: "21.3%",
+            marginTop: "26.3%",
             marginLeft: "0%",
             zIndex: "9999", // without this, items end up behind the Tabs
             border: "none",
@@ -424,13 +427,15 @@ export function PatientsList() {
             columns={[
                 { title: 'Name', field: 'name' },
                 { title: 'Last Login', field: 'activity' },
+                { title: 'Last Appointment', field: 'appointment_last', type: 'date'},
+                { title: 'Next Appointment', field: 'appointment_next', type: 'date'},
                 { title: 'PatientID', field: 'patient_id', type: 'numeric' },
                 { title: 'Dues', field: 'patient_dues', type: 'numeric' },
               ]}
             data={[
-                { name: 'yeah boy', activity: '14/04/20', patient_id: '0001', patient_dues: '$200'},
-                { name: 'Erin Levin', activity: '17/04/20', patient_id: '0002', patient_dues: '$300'},
-                { name: 'Test Ing', activity: '11/01/20', patient_id: '0003', patient_dues: '?'},
+                { name: 'yeah boy', activity: '04/04/20', appointment_last: '10/22/20', appointment_next: '10/23/20', patient_id: '0001', patient_dues: '$200'},
+                { name: 'Erin Levin', activity: '04/04/20', appointment_next: '10/23/20', patient_id: '0002', patient_dues: '$300'},
+                { name: 'Test Ing', activity: '11/01/20', appointment_next: '10/23/20', patient_id: '0003', patient_dues: '-'},
             ]}
             options={{
                 selection: true,
@@ -440,13 +445,41 @@ export function PatientsList() {
             icons={tableIcons}
           />
         </TabPanel>
-        <TabPanel value={value} index={1}>
-            <Typography variant="h4" style={{color: "black", position: "absolute", marginTop: "41.2%", zIndex: "9999"}}>
-                Item two
-            </Typography>
+        <TabPanel value={value} index={1}>  {/* SEEN */}
+        <MaterialTable
+          style={{
+            position: "absolute",
+            marginTop: "26.3%",
+            marginLeft: "0%",
+            zIndex: "9999", // without this, items end up behind the Tabs
+            border: "none",
+            boxShadow: "none",
+            width: "82.3%",
+          }}
+            title="Patients" // if(appointment_last within last 5 days): include patient info in table
+            columns={[ 
+                { title: 'Name', field: 'name' },
+                { title: 'Last Login', field: 'activity' },
+                { title: 'Last Appointment', field: 'appointment_last', type: 'date'},
+                { title: 'Next Appointment', field: 'appointment_next', type: 'date'},
+                { title: 'PatientID', field: 'patient_id', type: 'numeric' },
+                { title: 'Dues', field: 'patient_dues', type: 'numeric' },
+              ]}
+            data={[
+                { name: 'yeah boy', activity: '14/04/20', appointment_next: '10/23/20', patient_id: '0001', patient_dues: '$200'},
+                { name: 'Erin Levin', activity: '17/04/20', patient_id: '0002', patient_dues: '$300'},
+                { name: 'Test Ing', activity: '11/01/20', patient_id: '0003', patient_dues: '-'},
+            ]}
+            options={{
+                selection: true,
+                rowStyle: rowData => ({ backgroundColor: rowData.tableData.checked ? '#37b15933' : '' }),
+                paging: false,
+            }}
+            icons={tableIcons}
+          />
         </TabPanel>
-        <TabPanel value={value} index={2}>
-            Item thrte
+        <TabPanel value={value} index={2}> {/* UPCOMING */}
+        {/* if(appointment_next within next 24 hours): include patient info in table */}
         </TabPanel>
         </div>
         );
