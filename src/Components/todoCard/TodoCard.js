@@ -158,6 +158,7 @@ export default function TodoCard()
         if(newTasks[index][0].completed == false){
             newTasks[index][0].completed = true;
             axios.put('http://localhost:5000/todos', {
+                isDeleted: false,
                 completed: true,
                 todoId: newTasks[index][0].todoId
             })
