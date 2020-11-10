@@ -1,20 +1,12 @@
 import React, { useState, useEffect } from "react";
-import {Typography, CardHeader} from "@material-ui/core";
+import {Typography} from "@material-ui/core";
 import axios from "axios";
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import { makeStyles } from "@material-ui/core/styles";
-import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import ListItemText from '@material-ui/core/ListItemText';
-import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import DoneIcon from '@material-ui/icons/Done';
-import CommentIcon from '@material-ui/icons/Comment';
 
 const useStyles = makeStyles({
     root: {
@@ -76,7 +68,7 @@ const useStyles = makeStyles({
     return (
         <div
             className="task"
-            style={{ textDecoration: task[0].completed ? "line-through" : "" }}
+            style={{ textDecoration: task[0].completed ? "line-through" : ""}}
         >
             {task[0].title}
 
@@ -90,7 +82,6 @@ const useStyles = makeStyles({
 
 function CreateTask({ addTask }) {
     const [value, setValue] = useState("");
-    
     const handleSubmit = e => {
         e.preventDefault();
         if (!value) return;
@@ -109,7 +100,7 @@ function CreateTask({ addTask }) {
         </form>
     );
 }
-var temp = [];
+let temp = [];
 
 export default function TodoCard()
 {
@@ -124,7 +115,7 @@ export default function TodoCard()
           let {data} = await axios.get("http://localhost:5000/todos/" + doctorID);
           for (const todo in data){
             if(!data[todo].isDeleted){
-                const newTodo = [...todos, {title: data[todo].Title, completed: data[todo].Completed, doctorId: data[todo].DoctorId, todoId: data[todo].TodoId }];
+                const newTodo = [...todos, {title: data[todo].Title, completed: data[todo].Completed, doctorId: data[todo].DoctorId, todoId: data[todo].TodoId, isDeleted: data[todo].isDeleted }];
                 temp.push(newTodo);
             }
           }
@@ -135,6 +126,7 @@ export default function TodoCard()
     useEffect(() => { 
         setTasksRemaining(todos.filter(task => !task[0].completed).length) 
     });
+
     
     const sendPostRequest = async (newTask) => {
         try {
@@ -146,11 +138,11 @@ export default function TodoCard()
     };
 
     const addTask = title => {
-        const newTasks = [...todos, { title, completed: false, doctorId: doctorID }];
-        const newTask = [{ doctorId: doctorID, title, completed: 0,  isDeleted: 0 }];
+        const newTask = [{ title: title, completed: false, doctorId: doctorID, isDeleted: false, todoId: temp[temp.length -1][0].todoId+1 }];
         // POST request using axios inside useEffect React hook
+        temp.push(newTask);
         sendPostRequest(newTask);
-        setTodos(newTasks);
+        setTodos([...temp]);
     };
 
     const completeTask = index => {
@@ -166,6 +158,7 @@ export default function TodoCard()
         else{
             newTasks[index][0].completed = false;
             axios.put('http://localhost:5000/todos', {
+                isDeleted: false,
                 completed: false,
                 todoId: newTasks[index][0].todoId
             })
@@ -176,12 +169,14 @@ export default function TodoCard()
 
     const removeTask = index => {
         const newTasks = [...todos];
+        console.log(newTasks[index][0]);
         axios.put('http://localhost:5000/todos', {
-                completed: newTasks[index][0].completed,
                 isDeleted: true,
+                completed: newTasks[index][0].completed,
                 todoId: newTasks[index][0].todoId
         })
         newTasks.splice(index, 1);
+        temp.slice(index, 1);
         setTodos(newTasks);
     };
 
