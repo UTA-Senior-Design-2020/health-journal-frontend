@@ -155,17 +155,31 @@ export default function TodoCard()
 
     const completeTask = index => {
         const newTasks = [...todos];
-        newTasks[index][0].completed = true;
-        axios.put('http://localhost:5000/todos', {
-            completed: true,
-            todoId: newTasks[index][0].todoId
-        })
+        if(newTasks[index][0].completed == false){
+            newTasks[index][0].completed = true;
+            axios.put('http://localhost:5000/todos', {
+                completed: true,
+                todoId: newTasks[index][0].todoId
+            })
+        }
+        else{
+            newTasks[index][0].completed = false;
+            axios.put('http://localhost:5000/todos', {
+                completed: false,
+                todoId: newTasks[index][0].todoId
+            })
+        }
+        
         setTodos(newTasks);
-        console.log(newTasks);
     };
 
     const removeTask = index => {
         const newTasks = [...todos];
+        axios.put('http://localhost:5000/todos', {
+                completed: newTasks[index][0].completed,
+                isDeleted: true,
+                todoId: newTasks[index][0].todoId
+        })
         newTasks.splice(index, 1);
         setTodos(newTasks);
     };
