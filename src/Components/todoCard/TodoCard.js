@@ -76,15 +76,14 @@ const useStyles = makeStyles({
     return (
         <div
             className="task"
-            style={{ textDecoration: task.completed ? "line-through" : "" }}
+            style={{ textDecoration: task[0].completed ? "line-through" : "" }}
         >
-            {task.title}
+            {task[0].title}
 
             <IconButton style={{ background: "red" }} size="small" onClick={() => removeTask(index)}><DeleteIcon/></IconButton>
             <IconButton style={{ background: "red" }} size="small" onClick={() => completeTask(index)}>
                 <DoneIcon/>
             </IconButton>
-
         </div>
     );
 }
@@ -125,16 +124,16 @@ export default function TodoCard()
           let {data} = await axios.get("http://localhost:5000/todos/" + doctorID);
           for (const todo in data){
             if(!data[todo].isDeleted){
-                const newTodo = [{title: data[todo].Title, completed: data[todo].Completed, doctorId: data[todo].DoctorId, todoId: data[todo].TodoId }];
+                const newTodo = [...todos, {title: data[todo].Title, completed: data[todo].Completed, doctorId: data[todo].DoctorId, todoId: data[todo].TodoId }];
                 temp.push(newTodo);
-                setTodos(newTodo);
             }
           }
+          setTodos(temp);
         }
         getData();
       }, []) 
     useEffect(() => { 
-        setTasksRemaining(todos.filter(task => !task.completed).length) 
+        setTasksRemaining(todos.filter(task => !task[0].completed).length) 
     });
     
     const sendPostRequest = async (newTask) => {
@@ -148,7 +147,7 @@ export default function TodoCard()
 
     const addTask = title => {
         const newTasks = [...todos, { title, completed: false, doctorId: doctorID }];
-        const newTask = [ { doctorId: doctorID, title, completed: 0,  isDeleted: 0 }];
+        const newTask = [{ doctorId: doctorID, title, completed: 0,  isDeleted: 0 }];
         // POST request using axios inside useEffect React hook
         sendPostRequest(newTask);
         setTodos(newTasks);
@@ -156,8 +155,13 @@ export default function TodoCard()
 
     const completeTask = index => {
         const newTasks = [...todos];
-        newTasks[index].completed = true;
+        newTasks[index][0].completed = true;
+        axios.put('http://localhost:5000/todos', {
+            completed: true,
+            todoId: newTasks[index][0].todoId
+        })
         setTodos(newTasks);
+        console.log(newTasks);
     };
 
     const removeTask = index => {
@@ -172,7 +176,6 @@ export default function TodoCard()
             <Typography variant="h5" component="h1" align='center'>To do</Typography>
             <div className={classes.header}>Pending tasks ({tasksRemaining})</div>
             <div className={classes.task}>
-                {console.log(todos)}
                 {todos.map((task, index) => (
                     <Task
                     task={task}
@@ -181,7 +184,6 @@ export default function TodoCard()
                     removeTask={removeTask}
                     key={index}
                     />
-                    
                 ))}
             </div>
             <div className={classes.createtask} >
