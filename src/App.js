@@ -8,6 +8,13 @@ import Messages from "./Pages/Messages";
 import Patients from "./Pages/Patients";
 import Nav from "./Pages/Nav";
 import ProfilePage from "./Pages/ProfilePage";
+import Login from "./Pages/Login";
+import Signup from './Pages/Signup'
+import Settings from './Pages/Settings'
+import PrivateRoute from './PrivateRoute'
+import ForgotPassword from './Pages/ForgotPassword'
+import { AuthProvider } from "./Context/AuthContext";
+
 
 //import About from './About';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
@@ -22,18 +29,23 @@ const useStyles = makeStyles({
 function App() {
   const classes = useStyles();
   return (
-    <Router>
+    <AuthProvider>
+      <Router>
       <Switch>
         <Nav>
-          <Route exact path="/" component={Dashboard} />
-          <Route path="/profile" component={ProfilePage} />
-          <Route path="/tasks" component={Tasks} />
-          <Route path="/messages" component={Messages} />
-          <Route path="/patients" component={Patients} />
-          
+          <PrivateRoute exact path="/" component={Dashboard} />
+          <PrivateRoute path="/profile" component={ProfilePage} />
+          <PrivateRoute path="/tasks" component={Tasks} />
+          <PrivateRoute path="/messages" component={Messages} />
+          <PrivateRoute path="/patients" component={Patients} />
+          <Route path="/login" component={Login} />
+          <Route path="/signup" component={Signup} />
+          <PrivateRoute path="/settings" component={Settings} />
+          <Route path="/forgot-password" component={ForgotPassword} />
         </Nav>
       </Switch>
     </Router>
+    </AuthProvider>
   );
 }
 
