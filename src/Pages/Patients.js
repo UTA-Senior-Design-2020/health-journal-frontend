@@ -35,7 +35,7 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
-import Login from './Login';
+import { useAuth } from '../Context/AuthContext'
 
 const theme = createMuiTheme();
 
@@ -181,6 +181,8 @@ const useStyles = makeStyles({
 
 export default function Patients() {
   const classes = useStyles();
+  const { currentUser } = useAuth();
+  console.log(JSON.stringify(currentUser))
   return (
     <React.Fragment>
     <PatientBox />
@@ -200,6 +202,7 @@ export function TopAppBar() {
     const classes = useStyles();
     return (
         <div className={classes.topBar}>
+          
           <AppBar position="static" color="" style={{height: "98%"}}>
             <Toolbar>
               <Button style={{marginTop: ".9%", marginLeft: "1%", display: "block",}}

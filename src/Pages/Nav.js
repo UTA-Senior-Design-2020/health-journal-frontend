@@ -6,7 +6,7 @@ import Messages from "./Messages";
 import Patients from "./Patients";
 import Tasks from "./Tasks";
 import RecentlySeen from "./RecentlySeen";
-import Settings from "./Settings";
+import SettingsButton from "../Components/settings/settingsButton";
 import ClientCard from "../Components/clientCard/ClientCard";
 import NavCard from "../Components/navCard/navCard";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -167,7 +167,7 @@ function Nav(props) {
         </List>
         <Divider />
         <RecentlySeen />
-        <Settings/>
+        <SettingsButton/>
       </Drawer>
       <main className={classes.content}>
         {/* Used to move content below top app bar */}
