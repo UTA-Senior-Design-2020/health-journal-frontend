@@ -5,6 +5,8 @@ import Messages from "./Pages/Messages";
 import Patients from "./Pages/Patients";
 import Nav from "./Pages/Nav";
 import ProfilePage from "./Pages/ProfilePage";
+import Login from "./Pages/Login";
+
 
 //import About from './About';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
@@ -27,6 +29,8 @@ function App() {
           <Route path="/tasks" component={Tasks} />
           <Route path="/messages" component={Messages} />
           <Route path="/patients" component={Patients} />
+          <Route path="/login" component={Login} />
+          
           
         </Nav>
       </Switch>

@@ -17,6 +17,7 @@ import StarsIcon from '@material-ui/icons/Stars';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import SearchIcon from '@material-ui/icons/Search';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
+import { GoogleLogin, useGoogleLogin } from 'react-google-login';
 
 // following imports are for Material-Table
 import AddBox from '@material-ui/icons/AddBox';  
@@ -34,6 +35,7 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
+import Login from './Login';
 
 const theme = createMuiTheme();
 
@@ -189,6 +191,7 @@ export default function Patients() {
     <ButtonView />
     <ButtonCall />
     </React.Fragment>
+
   );
 }
 
@@ -234,6 +237,9 @@ export function TopAppBar() {
 
 export function PatientBox() {
     const classes = useStyles();
+    const responseGoogle = (response) => {
+      console.log(response);
+    }
     return ( 
       <Card className={classes.blueBox}>
         <CardContent>
