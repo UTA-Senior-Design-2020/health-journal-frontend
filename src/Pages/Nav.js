@@ -6,6 +6,9 @@ import Messages from "./Messages";
 import Patients from "./Patients";
 import Tasks from "./Tasks";
 import RecentlySeen from "./RecentlySeen";
+import Settings from "./Settings";
+import ClientCard from "../Components/clientCard/ClientCard";
+import NavCard from "../Components/navCard/navCard";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import "./Nav.css";
 import { makeStyles } from "@material-ui/core/styles";
@@ -31,13 +34,14 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import Grid from '@material-ui/core/Grid';
 import MessageIcon from '@material-ui/icons/Message';
 
+
 import { Link } from "react-router-dom";
 
 const navList = [
   { name: "Dashboard", icon: HomeIcon, to: "/" },
   { name: "Messages", icon: MessageIcon, to: "/messages" },
   { name: "Tasks", icon: AssignmentIcon, to: "/tasks" },
-  { name: "Patients", icon: PeopleIcon, to: "/patients" },
+  { name: "Patients", icon: PeopleIcon, to: "/patients" }
 ];
 
 // TODO
@@ -79,6 +83,10 @@ const useStyles = makeStyles((theme) => ({
     '&:hover $child':{
       color: '#2196F3'
     }
+  },
+  prof: {
+    "text-decoration": "none",
+    "color": "black"
   }
 }));
 
@@ -115,7 +123,9 @@ function Nav(props) {
               <Grid item xs container direction="row" spacing={2}>
                   <Grid item xs>
                       <Typography variant="h5">
+                        <Link to={"/profile"} className={classes.prof}>
                           Dr. Young
+                        </Link>
                       </Typography>
                   </Grid>
               </Grid>
@@ -157,6 +167,7 @@ function Nav(props) {
         </List>
         <Divider />
         <RecentlySeen />
+        <Settings/>
       </Drawer>
       <main className={classes.content}>
         {/* Used to move content below top app bar */}
