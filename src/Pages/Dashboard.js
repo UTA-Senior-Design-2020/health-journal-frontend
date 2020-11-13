@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Button from "@material-ui/core/Button";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import { makeStyles } from "@material-ui/core/styles";
@@ -48,6 +49,20 @@ const useStyles = makeStyles({
 
 export default function Dashboard() {
   const classes = useStyles();
+  
+  const[patients1, setPatients] = useState({});
+  useEffect(() => {
+    async function getData(){
+      let {data} = await axios.get("http://localhost:5000/patients");
+      setPatients(data)
+    }
+      getData();
+  }, []) 
+
+  /*for (const patient in patients1){
+    console.log(`${patient}: ${patients1[patient].GivenName}`)
+  }*/
+  
   var patients = ['Nicci Troiani','Thom Yorke'];
   return (
     <div className={classes.root}>
@@ -56,13 +71,13 @@ export default function Dashboard() {
       </Typography>
       <div className={classes.box}>
         <div className={classes.alerts}>
-          <DashBoardAlertsCard  cardName="Patients" amount="8" icon={PeopleIcon} />
+          <DashBoardAlertsCard  cardName="Patients" amount={patients1.length} icon={PeopleIcon} />
         </div>
         <div className={classes.alerts}>
-          <DashBoardAlertsCard cardName="Reports" amount="4" icon={AlertIcon} />
+          <DashBoardAlertsCard cardName="Notifications" amount="4" icon={AlertIcon} />
         </div>
         <div className={classes.current}>
-          <ClientCard CardTitle="Current Client" BackgroundColor="#2196F3" SubtitleColor="rgba(255, 255, 255, 0.54)" TextColor="#FFFFFF" PatientName={patients[0]} PhoneNumber="(555)-555-5555" AppointmentStartTime="2:45 PM"/>
+          <ClientCard CardTitle="Current Client" BackgroundColor="#2196F3" SubtitleColor="rgba(255, 255, 255, 0.54)" TextColor="#FFFFFF" PatientName={patients} PhoneNumber="(555)-555-5555" AppointmentStartTime="2:45 PM"/>
         </div>
         <ClientCard CardTitle="Upcoming" BackgroundColor="#FFFFFF" SubtitleColor="rgba(0, 0, 0, 0.54)" TextColor="rgba(0, 0, 0, 0.87)" PatientName={patients} PhoneNumber="(555)-555-5555" AppointmentStartTime="2:45 PM"/> 
       </div>
