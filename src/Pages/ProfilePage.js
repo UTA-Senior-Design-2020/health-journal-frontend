@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from '@material-ui/core/TextField';
 import Typography from "@material-ui/core/Typography";
@@ -11,6 +11,8 @@ import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
+import { useForm } from 'react-hook-form';
+import FormData from 'form-data';
 import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
@@ -56,7 +58,43 @@ const useStyles = makeStyles((theme) => ({
 export default function ProfilePage() {
   const classes = useStyles();
   const [tasks, setTasks] = useState([{ id: 1, name: "Run" }]); // This is the new way of doing this.state with react hooks. it also users destructuring. We are using [] for the destrucure since useState returns something like 'stateVariable, stateUpdateFunction'. tasks contains the infromation, setTasks is a function that updates the tasks state.
+  const { register, handleSubmit, errors } = useForm()
+  const id = 'WATeb5ivETTZy3zfo1klqmyMiWR2'
 
+  const [file, setFile] = useState(''); // storing the uploaded file    // storing the recived file from backend
+  const [data, getFile] = useState({ name: "", path: "" });    
+  const [progress, setProgress] = useState(0); // progess bar
+  const el = useRef(); // accesing input element
+
+  const handleChange = (e) => {
+    setProgress(0)
+    const file = e.target.files[0]; // accesing file
+    //console.log(file);
+    setFile(file); // storing file
+  }
+
+  const uploadFile = () => {
+    const formData = new FormData();
+    //console.log(file);
+    formData.append('file', file); // appending file
+    console.log(formData.get('file'));
+    axios.put('http://localhost:5000/doctors/'+id, formData);
+  }
+  
+  /*const onSubmit = (data) => {
+    //console.log(data);
+    const fd = new FormData();
+    fd.append('name', )
+    console.log(data['picture'][0]);
+    axios.put('http://localhost:5000/doctors/'+id, data['picture'][0], {
+      headers: {
+        'Content-Type': data['picture'][0].type
+      }
+    })
+  };
+
+
+  /*
   useEffect(() => {
     fetchTasks();
   }, []); // the second paramter of [] will cause this useEffect function to only run once the page has loaded. It will not run after that.
@@ -82,6 +120,8 @@ export default function ProfilePage() {
       const fd = new FormData();
       //axios.post('http://ec2co-ecsel-w7q6c99ot638-2098345273.us-east-1.elb.amazonaws.com:5000/')
   }
+  */
+
   return (
     <div className={classes.root}>
       <Typography variant="h4" gutterBottom>
@@ -92,17 +132,9 @@ export default function ProfilePage() {
         <Avatar alt="Dr. Young" className={classes.large}>
         </Avatar>
         <br />
-        <input 
-          accept="image/*" 
-          className={classes.input} 
-          id="raised-button-file"
-          type="file"
-        /> 
+        <input ref={el} onChange={handleChange} type="file"></input>
         <br />
-        <br />
-        <Button className={classes.uploadButton} variant="contained" color="primary" component="span">
-          Upload
-        </Button>
+        <button onClick={uploadFile}>Submit</button> 
       </Card>
       <Card style={{}} className={classes.text}>
       <form noValidate autoComplete="off">
