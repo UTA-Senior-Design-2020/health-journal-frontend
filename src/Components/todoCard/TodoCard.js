@@ -109,6 +109,7 @@ export default function TodoCard()
     const classes = useStyles();
     const [tasksRemaining, setTasksRemaining] = useState(0);
     const [todos, setTodos] = useState([]);
+    const [test, setTest]  = useState(0)
     
     useEffect(() => {
         async function getData(){
@@ -118,6 +119,7 @@ export default function TodoCard()
                 const newTodo = [...todos, {title: data[todo].Title, completed: data[todo].Completed, doctorId: data[todo].DoctorId, todoId: data[todo].TodoId, isDeleted: data[todo].isDeleted }];
                 temp.push(newTodo);
             }
+            setTest(data.length);
           }
           setTodos(temp);
         }
@@ -137,11 +139,13 @@ export default function TodoCard()
         }
     };
 
+
     const addTask = title => {
-        const newTask = [{ title: title, completed: false, doctorId: doctorID, isDeleted: false, todoId: temp[temp.length -1][0].todoId+1 }];
+        const newTask = [{ title: title, completed: false, doctorId: doctorID, isDeleted: false, todoId: test+1}];
         // POST request using axios inside useEffect React hook
-        temp.push(newTask);
+        
         sendPostRequest(newTask);
+        temp.push(newTask);
         setTodos([...temp]);
     };
 
@@ -169,7 +173,6 @@ export default function TodoCard()
 
     const removeTask = index => {
         const newTasks = [...todos];
-        console.log(newTasks[index][0]);
         axios.put('http://localhost:5000/todos', {
                 isDeleted: true,
                 completed: newTasks[index][0].completed,
