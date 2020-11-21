@@ -62,12 +62,9 @@ export default function ProfilePage() {
   const id = 'WATeb5ivETTZy3zfo1klqmyMiWR2'
 
   const [file, setFile] = useState(''); // storing the uploaded file    // storing the recived file from backend
-  const [data, getFile] = useState({ name: "", path: "" });    
-  const [progress, setProgress] = useState(0); // progess bar
   const el = useRef(); // accesing input element
 
   const handleChange = (e) => {
-    setProgress(0)
     const file = e.target.files[0]; // accesing file
     //console.log(file);
     setFile(file); // storing file
@@ -80,47 +77,6 @@ export default function ProfilePage() {
     console.log(formData.get('file'));
     axios.put('http://localhost:5000/doctors/'+id, formData);
   }
-  
-  /*const onSubmit = (data) => {
-    //console.log(data);
-    const fd = new FormData();
-    fd.append('name', )
-    console.log(data['picture'][0]);
-    axios.put('http://localhost:5000/doctors/'+id, data['picture'][0], {
-      headers: {
-        'Content-Type': data['picture'][0].type
-      }
-    })
-  };
-
-
-  /*
-  useEffect(() => {
-    fetchTasks();
-  }, []); // the second paramter of [] will cause this useEffect function to only run once the page has loaded. It will not run after that.
-
-  async function fetchTasks(patientId) {
-    try {
-      let apiResponse = await axios.get("/api/tasks"); // axios.get is an async function, therefore we need to call it with await. AND because of that, we have to make this function 'fetchTasks' an async function.
-      console.log("tasks > api/tasks GET:", apiResponse);
-
-      let { data, status } = apiResponse; // apiResponse is a json object that contains many keys. What we are doing here is destructuring and getting only the keys and the value of 'data' and 'status'
-      console.log("tasks > apiResposne", apiResponse);
-      console.log("tasks > data:", data);
-      console.log("tasks > status:", status);
-      if (status === 200) {
-        setTasks(data); // save the data from our api to the state variable 'tasks'
-      }
-    } catch (error) {
-      console.log("tasks > error:", error);
-      setTasks([]); // Api returned a status code other than 200 OK. Set tasks to nothing.
-    }
-  }
-  var fileUploadHandler = () => {
-      const fd = new FormData();
-      //axios.post('http://ec2co-ecsel-w7q6c99ot638-2098345273.us-east-1.elb.amazonaws.com:5000/')
-  }
-  */
 
   return (
     <div className={classes.root}>
