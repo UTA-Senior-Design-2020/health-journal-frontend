@@ -145,6 +145,7 @@ export default function TodoCard()
         // POST request using axios inside useEffect React hook
         
         sendPostRequest(newTask);
+        setTest(test+1);
         temp.push(newTask);
         setTodos([...temp]);
     };
@@ -179,7 +180,7 @@ export default function TodoCard()
                 todoId: newTasks[index][0].todoId
         })
         newTasks.splice(index, 1);
-        temp.slice(index, 1);
+        temp.splice(index, 1);
         setTodos(newTasks);
     };
 
