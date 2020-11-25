@@ -5,6 +5,7 @@ import Typography from "@material-ui/core/Typography";
 import Paper from '@material-ui/core/Paper';
 import Avatar from '@material-ui/core/Avatar';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import ReactRoundedImage from "react-rounded-image";
 import Grid from '@material-ui/core/Grid';
 import Modal from '@material-ui/core/Modal';
 import Button from '@material-ui/core/Button';
@@ -14,6 +15,7 @@ import CardContent from '@material-ui/core/CardContent';
 import { useForm } from 'react-hook-form';
 import FormData from 'form-data';
 import axios from "axios";
+import { useAuth } from "../Context/AuthContext";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -52,6 +54,10 @@ const useStyles = makeStyles((theme) => ({
     marginTop:"8px",
     background: "#2196F3",
     color: "white"
+  },
+  photo: {
+    height: "200px",
+    width: "280px"
   }
 }));
 
@@ -59,11 +65,37 @@ export default function ProfilePage() {
   const classes = useStyles();
   const [tasks, setTasks] = useState([{ id: 1, name: "Run" }]); // This is the new way of doing this.state with react hooks. it also users destructuring. We are using [] for the destrucure since useState returns something like 'stateVariable, stateUpdateFunction'. tasks contains the infromation, setTasks is a function that updates the tasks state.
   const { register, handleSubmit, errors } = useForm()
-  const id = 'WATeb5ivETTZy3zfo1klqmyMiWR2'
-
+  const { currentUser } = useAuth();
   const [file, setFile] = useState(''); // storing the uploaded file    // storing the recived file from backend
   const [images, setImages] = useState();
   const el = useRef(); // accesing input element
+
+  useEffect(() => {
+    async function getData(){
+      const res = await axios.get('http://localhost:5000/doctors/pic/'+currentUser.uid);
+      const b64Data = btoa(
+        new Uint8Array(res.data.data).reduce(
+            (dataArray, byte) => {
+                return dataArray + String.fromCharCode(byte);
+            }, 
+            ''
+        )
+      );
+      const userAvatarData = {
+        key: 'userAvatar',
+        value: `data:image/png;base64,${b64Data}`
+      };
+      setImages(userAvatarData.value); // here we return the base64 image data to our component
+      //setImages("data:image/png;base64," + res.data.data);
+      //console.log(res.data.data);
+    }
+    
+    getData();
+  }, [])
+  
+  function refreshPage(){
+    window.location.reload();
+  }
 
   const handleChange = (e) => {
     const file = e.target.files[0]; // accesing file
@@ -73,37 +105,25 @@ export default function ProfilePage() {
 
   const uploadFile = async () => {
     const formData = new FormData();
-    //console.log(file);
     formData.append('file', file); // appending file
     console.log(formData.get('file'));
-    const res = await axios.put('http://localhost:5000/doctors/upload/'+id, formData);
-    console.log(res);
+    const res = await axios.put('http://localhost:5000/doctors/upload/'+currentUser.uid, formData);
   }
-
-  const profilePicture = async () => {
-    const res = await axios.get('http://localhost:5000/doctors/pic/'+id);
-    const data = res.data.data;
-    setImages(data);
-    console.log(images);
-  }
-
 
   return (
     <div className={classes.root}>
       <Typography variant="h4" gutterottom>
         Update Profile Information
       </Typography>
-      {profilePicture}
+      {console.log(currentUser.uid)}
+      
       <br />
       <Card className={classes.profile}>
-        {/* <Avatar src={profilePicture} alt="Dr. Young" className={classes.large}>
-        </Avatar> */}
-        {/* <button onClick={profilePicture}>hello</button> */}
-        
+        <img src={images} className={classes.photo}/>
         <br />
-        <input ref={el} onChange={handleChange} type="file"></input>
+        <input ref={el} onChange={handleChange} type="file" accept="image/*"></input>
         <br />
-        <button onClick={uploadFile}>Submit</button> 
+        <button onClick={() => {uploadFile(); refreshPage();}}>Submit</button> 
       </Card>
       <Card style={{}} className={classes.text}>
       <form noValidate autoComplete="off">
@@ -139,3 +159,5 @@ export default function ProfilePage() {
     </div>
   );
 }
+
+
