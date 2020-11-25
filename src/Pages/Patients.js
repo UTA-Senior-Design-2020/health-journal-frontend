@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState, useRef } from "react";
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import Box from '@material-ui/core/Box';
@@ -17,7 +17,7 @@ import StarsIcon from '@material-ui/icons/Stars';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import SearchIcon from '@material-ui/icons/Search';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
-import { GoogleLogin, useGoogleLogin } from 'react-google-login';
+import axios from "axios";
 
 // following imports are for Material-Table
 import AddBox from '@material-ui/icons/AddBox';  
@@ -182,7 +182,7 @@ const useStyles = makeStyles({
 export default function Patients() {
   const classes = useStyles();
   const { currentUser } = useAuth();
-  console.log(JSON.stringify(currentUser))
+  //console.log(JSON.stringify(currentUser))
   return (
     <React.Fragment>
     <PatientBox />
@@ -240,9 +240,7 @@ export function TopAppBar() {
 
 export function PatientBox() {
     const classes = useStyles();
-    const responseGoogle = (response) => {
-      console.log(response);
-    }
+
     return ( 
       <Card className={classes.blueBox}>
         <CardContent>
@@ -376,8 +374,42 @@ function a11yProps(index) {
     };
   }
 
+function loadData(Patients) {
+  console.log(Patients)
+  let dict = [{ name:"", activity:"", appointment_last:"", appointment_next:"", patient_id:"", patient_dues:""}];
+  var arrayofPatients = [];
+    for(const Patient in Patients)
+    {
+      dict.name = Patients[Patient].GivenName+ ' ' +Patients[Patient].FamilyName
+      dict.activity = ""
+      dict.appointment_last = ""
+      dict.appointment_next = ""
+      dict.patient_id = Patients[Patient].PatientId
+      dict.patient_dues = ""
+      arrayofPatients.push(dict)
+      //dict = { name:"", activity:"", appointment_last:"", appointment_next:"", patient_id:"", patient_dues:""}
+      dict = [{}];
+    }
+    return arrayofPatients
+}
 export function PatientsList() {
     const classes = useStyles();
+
+    const [Patients, setPatients] = useState([]);
+    const id = '1';
+
+    useEffect(() => {
+      async function getData(){
+        let {data} = await axios.get("http://localhost:5000/patients/");
+        setPatients(data);
+      }
+      getData();
+    }, []) 
+  useEffect(() => { 
+  });
+
+  
+  
     const tableIcons = { // should prob put the next 16 lines in a js object or something
         Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
         Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
@@ -435,17 +467,11 @@ export function PatientsList() {
             title="Patients"
             columns={[
                 { title: 'Name', field: 'name' },
-                { title: 'Last Login', field: 'activity' },
                 { title: 'Last Appointment', field: 'appointment_last', type: 'date'},
                 { title: 'Next Appointment', field: 'appointment_next', type: 'date'},
                 { title: 'PatientID', field: 'patient_id', type: 'numeric' },
-                { title: 'Dues', field: 'patient_dues', type: 'numeric' },
               ]}
-            data={[
-                { name: 'yeah boy', activity: '04/04/20', appointment_last: '10/22/20', appointment_next: '10/23/20', patient_id: '0001', patient_dues: '$200'},
-                { name: 'Erin Levin', activity: '04/04/20', appointment_next: '10/23/20', patient_id: '0002', patient_dues: '$300'},
-                { name: 'Test Ing', activity: '11/01/20', appointment_next: '10/23/20', patient_id: '0003', patient_dues: '-'},
-            ]}
+            data={(loadData(Patients))}
             options={{
                 selection: true,
                 rowStyle: rowData => ({ backgroundColor: rowData.tableData.checked ? '#37b15933' : '' }),
@@ -453,7 +479,7 @@ export function PatientsList() {
             }}
             icons={tableIcons}
           />
-        </TabPanel>
+          </TabPanel>
         <TabPanel value={value} index={1}>  {/* SEEN */}
         <MaterialTable
           style={{
