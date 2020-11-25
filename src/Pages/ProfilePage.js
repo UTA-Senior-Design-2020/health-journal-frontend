@@ -62,6 +62,7 @@ export default function ProfilePage() {
   const id = 'WATeb5ivETTZy3zfo1klqmyMiWR2'
 
   const [file, setFile] = useState(''); // storing the uploaded file    // storing the recived file from backend
+  const [images, setImages] = useState();
   const el = useRef(); // accesing input element
 
   const handleChange = (e) => {
@@ -70,23 +71,35 @@ export default function ProfilePage() {
     setFile(file); // storing file
   }
 
-  const uploadFile = () => {
+  const uploadFile = async () => {
     const formData = new FormData();
     //console.log(file);
     formData.append('file', file); // appending file
     console.log(formData.get('file'));
-    axios.put('http://localhost:5000/doctors/'+id, formData);
+    const res = await axios.put('http://localhost:5000/doctors/upload/'+id, formData);
+    console.log(res);
   }
+
+  const profilePicture = async () => {
+    const res = await axios.get('http://localhost:5000/doctors/pic/'+id);
+    const data = res.data.data;
+    setImages(data);
+    console.log(images);
+  }
+
 
   return (
     <div className={classes.root}>
-      <Typography variant="h4" gutterBottom>
+      <Typography variant="h4" gutterottom>
         Update Profile Information
       </Typography>
+      {profilePicture}
       <br />
       <Card className={classes.profile}>
-        <Avatar alt="Dr. Young" className={classes.large}>
-        </Avatar>
+        {/* <Avatar src={profilePicture} alt="Dr. Young" className={classes.large}>
+        </Avatar> */}
+        {/* <button onClick={profilePicture}>hello</button> */}
+        
         <br />
         <input ref={el} onChange={handleChange} type="file"></input>
         <br />
