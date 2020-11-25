@@ -202,7 +202,7 @@ export function TopAppBar() {
     return (
         <div className={classes.topBar}>
           
-          <AppBar position="static" color="" style={{height: "98%"}}>
+          <AppBar position="static" color="inherit" style={{height: "98%"}}>
             <Toolbar>
               <Button style={{marginTop: ".9%", marginLeft: "1%", display: "block",}}
                 variant="contained"
@@ -349,9 +349,11 @@ function TabPanel(props) {
           {...other}
         >
           {value === index && (
-            <Box p={3}>
-              <Typography>{children}</Typography>
+            <Container>
+            <Box>
+              {children}
             </Box>
+            </Container>
           )}
         </div>
       );
@@ -485,8 +487,8 @@ export function PatientsList() {
           <MaterialTable
           style={{
             position: "absolute",
-            marginTop: "26.3%",
-            marginLeft: "0%",
+            marginTop: "27.8%",
+            marginLeft: "-8%",
             zIndex: "9999", // without this, items end up behind the Tabs
             border: "none",
             boxShadow: "none",
@@ -499,7 +501,7 @@ export function PatientsList() {
                 { title: 'Next Appointment', field: 'appointment_next', type: 'date'},
                 { title: 'PatientID', field: 'patient_id', type: 'numeric' },
               ]}
-            data={
+            data={ // loadData() induces a warning, but this function call is necessary.
               (loadData(Patients,Appointments))
             }
             options={{
