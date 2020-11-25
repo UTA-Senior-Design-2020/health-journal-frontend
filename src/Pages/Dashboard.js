@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Button from "@material-ui/core/Button";
-import DashboardIcon from "@material-ui/icons/Dashboard";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import DashBoardAlertsCard from "../Components/dashboardAlertsCard/DashBoardAlertsCard";
@@ -44,7 +42,6 @@ const useStyles = makeStyles({
     marginRight: '0px',
     verticalAlign: 'top'
   }
-
 });
 
 export default function Dashboard() {

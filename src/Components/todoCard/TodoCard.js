@@ -132,7 +132,7 @@ export default function TodoCard()
     
     const sendPostRequest = async (newTask) => {
         try {
-            const resp = await axios.post('http://localhost:5000/todos', newTask);
+            await axios.post('http://localhost:5000/todos', newTask);
         } catch (err) {
             // Handle Error Here
             console.error(err);
