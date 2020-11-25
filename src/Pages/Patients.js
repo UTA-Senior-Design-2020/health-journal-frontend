@@ -182,7 +182,6 @@ const useStyles = makeStyles({
 export default function Patients() {
   const classes = useStyles();
   const { currentUser } = useAuth();
-  //console.log(JSON.stringify(currentUser))
   return (
     <React.Fragment>
     <PatientBox />
@@ -240,7 +239,6 @@ export function TopAppBar() {
 
 export function PatientBox() {
     const classes = useStyles();
-
     return ( 
       <Card className={classes.blueBox}>
         <CardContent>
@@ -262,13 +260,13 @@ export function PatientBox() {
                   Nicci Triani
               </Typography>
               <Typography variant="h6" style={{position: "relative", paddingTop: "3%"}}>
-                  <Typography variant="h6" style={{ fontWeight: 'bold', display: 'inline-block'}}>Date of Birth:</Typography> 11/02/2020
+                  <strong>Date of Birth:</strong> 11/02/2020
               </Typography>
               <Typography variant="h6" style={{position: "relative", paddingTop: "%"}}>
-                  <Typography variant="h6" style={{ fontWeight: 'bold', display: 'inline-block'}}>Address:</Typography> 42 Wallaby Way, Sydney, TX 76013
+                  <strong>Address:</strong> 42 Wallaby Way, Sydney, TX 76013
               </Typography>
               <Typography variant="h6" style={{position: "relative", paddingTop: "%"}}>
-                  <Typography variant="h6" style={{ fontWeight: 'bold', display: 'inline-block'}}>Primary Care Physician:</Typography> Dr. Beats 
+                  <strong>Primary Care Physician:</strong> Dr. Beats 
               </Typography>
               <Typography variant="h6" style={{position: "relative", paddingTop: "%", fontSize:"70%", textTransform: "uppercase", color: "rgba(255, 255, 255, 0.76)"}}>
                   NicciTriani@gmail.com
@@ -294,7 +292,7 @@ export function ButtonMessage() {
     const classes = useStyles();
     return (
     <Button className={classes.buttonWhiteFont}>
-        <Typography variant="h6" style={{border: "none", fontWeight: "bold"}}>
+        <Typography component={"span"} variant="h6" style={{border: "none", fontWeight: "bold"}}>
             Message
         </Typography>
     </Button>
@@ -305,7 +303,7 @@ export function ButtonCall() {
     const classes = useStyles();
     return (
     <Button className={classes.buttonWhiteFont} style={{marginLeft: "49.5%"}}>
-        <Typography variant="h6" style={{border: "none", fontWeight: "bold"}}>
+        <Typography component={"span"} variant="h6" style={{border: "none", fontWeight: "bold"}}>
             Call
         </Typography>
     </Button>
@@ -316,7 +314,7 @@ export function ButtonView() {
     const classes = useStyles();
     return (
     <Button className={classes.buttonWhiteFont} style={{marginLeft: "55%"}}>
-        <Typography variant="h6" style={{border: "none", fontWeight: "bold"}}>
+        <Typography component={"span"} variant="h6" style={{border: "none", fontWeight: "bold"}}>
             View
         </Typography>
     </Button>
@@ -374,41 +372,71 @@ function a11yProps(index) {
     };
   }
 
-function loadData(Patients) {
-  console.log(Patients)
+function loadData(Patients,Appointments) {
   let dict = [{ name:"", activity:"", appointment_last:"", appointment_next:"", patient_id:"", patient_dues:""}];
   var arrayofPatients = [];
+  var appointments = loadAppointments(Appointments)
+
     for(const Patient in Patients)
     {
       dict.name = Patients[Patient].GivenName+ ' ' +Patients[Patient].FamilyName
       dict.activity = ""
-      dict.appointment_last = ""
+
+      
+      dict.appointment_last = appointments[Patients[Patient.PatientId]]
+
+
       dict.appointment_next = ""
       dict.patient_id = Patients[Patient].PatientId
       dict.patient_dues = ""
       arrayofPatients.push(dict)
-      //dict = { name:"", activity:"", appointment_last:"", appointment_next:"", patient_id:"", patient_dues:""}
       dict = [{}];
     }
     return arrayofPatients
 }
+
+function loadAppointments(Appointments) {
+  let dict = [{ AppointmentID:"", PatientID:"", DoctorID:"", Date:"", StartTime:"", EndTime:"", Status: ""}];
+  var arrayofAppointments = [];
+  for(const Appointment in Appointments)
+  {
+    dict.AppointmentID = Appointments[Appointment].AppointmentId
+    dict.PatientID = Appointments[Appointment].PatientId
+    dict.DoctorID = Appointments[Appointment].DoctorId
+    dict.Date = Appointments[Appointment].Date
+    dict.StartTime = Appointments[Appointment].StartTime
+    dict.EndTime = Appointments[Appointment].EndTime
+    dict.Status = Appointments[Appointment].Status
+    arrayofAppointments.push(dict)
+    dict = [{}];
+  }
+  return arrayofAppointments
+}
+
 export function PatientsList() {
     const classes = useStyles();
 
+    const {currentUser} = useAuth();
     const [Patients, setPatients] = useState([]);
-    const id = '1';
+    const [Appointments, setAppointments] = useState([]);
 
     useEffect(() => {
       async function getData(){
+        try{
         let {data} = await axios.get("http://localhost:5000/patients/");
+        var data2 = await axios.get("http://localhost:5000/appointments/"+currentUser.uid);
         setPatients(data);
+        setAppointments(data2.data);
       }
+      catch(err)
+      {
+        console.err(err);
+      }
+    }
       getData();
     }, []) 
   useEffect(() => { 
-  });
-
-  
+  });  
   
     const tableIcons = { // should prob put the next 16 lines in a js object or something
         Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -471,7 +499,9 @@ export function PatientsList() {
                 { title: 'Next Appointment', field: 'appointment_next', type: 'date'},
                 { title: 'PatientID', field: 'patient_id', type: 'numeric' },
               ]}
-            data={(loadData(Patients))}
+            data={
+              (loadData(Patients,Appointments))
+            }
             options={{
                 selection: true,
                 rowStyle: rowData => ({ backgroundColor: rowData.tableData.checked ? '#37b15933' : '' }),
