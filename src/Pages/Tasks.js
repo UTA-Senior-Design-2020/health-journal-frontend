@@ -8,35 +8,37 @@ const useStyles = makeStyles({
   root: {},
 });
 
+/* Tasks allows doctors to modify existing tasks that their patients have.
+ */
+
 export default function Tasks() {
   const classes = useStyles();
-  const [tasks, setTasks] = useState([{ id: 1, name: "Run" }]); // This is the new way of doing this.state with react hooks. it also users destructuring. We are using [] for the destrucure since useState returns something like 'stateVariable, stateUpdateFunction'. tasks contains the infromation, setTasks is a function that updates the tasks state.
+  const [tasks, setTasks] = useState([{ id: 1, name: "Run" }]);
 
   useEffect(() => {
-    async function getData(){
-      let {data} = await axios.get("http://localhost:5000/tasks");
-      console.log("data:", data);
-      setTasks(data);
-    }
-    getData();
-  }, [])
-   // the second paramter of [] will cause this useEffect function to only run once the page has loaded. It will not run after that.
+    // async function getData() {
+    //   let { data } = await axios.get("http://localhost:5000/tasks/");
+    //   console.log("data:", data);
+    //   setTasks(data);
+    // }
+    // getData();
+  }, []);
 
   async function fetchTasks(patientId) {
     try {
-      let apiResponse = await axios.get("tasks"); // axios.get is an async function, therefore we need to call it with await. AND because of that, we have to make this function 'fetchTasks' an async function.
+      let apiResponse = await axios.get("tasks");
       console.log("tasks > tasks GET:", apiResponse);
 
-      let { data, status } = apiResponse; // apiResponse is a json object that contains many keys. What we are doing here is destructuring and getting only the keys and the value of 'data' and 'status'
+      let { data, status } = apiResponse;
       console.log("tasks > apiResponse", apiResponse);
       console.log("tasks > data:", data);
       console.log("tasks > status:", status);
       if (status === 200) {
-        setTasks(data); // save the data from our api to the state variable 'tasks'
+        setTasks(data);
       }
     } catch (error) {
       console.log("tasks > error:", error);
-      setTasks([]); // Api returned a status code other than 200 OK. Set tasks to nothing.
+      setTasks([]);
     }
   }
 
