@@ -1,14 +1,28 @@
 import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import MaterialTable from "material-table";
+import { Container, Box } from "@material-ui/core";
+import TaskCard from "../Components/tasks/TaskCard";
 import axios from "axios";
 
 const useStyles = makeStyles({
   root: {},
+  container: {
+    background: "white",
+  },
+  tasksContainer: {
+    paddingTop: "1em",
+
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    alignItems: "space-around",
+  },
 });
 
-/* Tasks allows doctors to modify existing tasks that their patients have.
+/* Tasks allows doctors to modify existing tasks that their patients currently have.
+   At startup, doctors will see a list of template tasks that they can easily assign to a patient.
+   Selecting a Task will open 'Assign To Patient'.
  */
 
 export default function Tasks() {
@@ -47,19 +61,19 @@ export default function Tasks() {
       <Typography variant="h4" gutterBottom>
         Tasks
       </Typography>
-      <Typography variant="h6"> Content</Typography>
-      <br />
-      <br />
-      <MaterialTable
-        title="Tasks"
-        data={tasks}
-        columns={[
-          { title: "id", field: "id" },
-          { title: "Patient", field: "patientID" },
-          { title: "Title", field: "title" },
-          { title: "Type", field: "groupId" },
-        ]}
-      />
+
+      <Container className={classes.container} maxWidth="lg">
+        {/* <Typography variant="h6">General Tasks</Typography> */}
+        <Box className={classes.tasksContainer}>
+          <TaskCard title="zyrtec" type="medication"></TaskCard>
+          <TaskCard title="Clarinex"></TaskCard>
+          <TaskCard title="Xyzal"></TaskCard>
+          <TaskCard title="Alavert"></TaskCard>
+          <TaskCard title="Astelin"></TaskCard>
+          <TaskCard title="Patanase"></TaskCard>
+          <TaskCard title="Alaway"></TaskCard>
+        </Box>
+      </Container>
     </div>
   );
 }
