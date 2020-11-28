@@ -14,7 +14,7 @@ const useStyles = makeStyles({
   },
   container: {
     padding: ".5em 0 1em 1em",
-    borderLeft: "red .5em solid",
+    borderLeft: ({ borderColor }) => `.5em solid ${borderColor}`,
     borderRadius: "2px",
     display: "flex",
   },
@@ -24,8 +24,10 @@ const useStyles = makeStyles({
   },
 });
 
-export default function TaskCard({ title }) {
-  const classes = useStyles();
+export default function TaskCard({ title, type, frequency, instructions }) {
+  const borderColor = type === "medication" ? "#2196f3" : "#ffeb3b";
+
+  const classes = useStyles({ borderColor });
 
   return (
     <Box className={classes.root}>
