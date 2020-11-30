@@ -37,7 +37,7 @@ export default function TaskCard({ title, type, frequency, instructions }) {
           <Typography variant="caption" gutterBottom>
             Allergy Medicine
           </Typography>
-          <Typography variant="body2">2 per day for 3 months</Typography>
+          <Typography variant="body2">{instructions}</Typography>
         </div>
         <Box className={classes.actions}>
           <IconButton>

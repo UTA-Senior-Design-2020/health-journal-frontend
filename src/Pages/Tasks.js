@@ -3,6 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import { Container, Box, Button } from "@material-ui/core";
 import TaskCard from "../Components/tasks/TaskCard";
+import CreateTasks from "../Components/tasks/CreateTask";
 import axios from "axios";
 import LocalHospitalIcon from "@material-ui/icons/LocalHospital";
 import DirectionsRunIcon from "@material-ui/icons/DirectionsRun";
@@ -86,6 +87,7 @@ export default function Tasks() {
 
   return (
     <div className={classes.root}>
+      <CreateTasks task={taskList[0]}></CreateTasks>
       <Typography variant="h4" gutterBottom>
         Tasks
       </Typography>

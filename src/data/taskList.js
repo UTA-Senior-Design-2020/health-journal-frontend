@@ -46,31 +46,31 @@ const defaultTasks = [
     title: "Run - 2 mins",
     type: "lifestyle",
     frequency: 1,
-    instructions: "Run for 10 minutes a day.",
+    instructions: "Run for 10 minutes a day",
   },
   {
     title: "Run - 5 mins",
     type: "lifestyle",
     frequency: 1,
-    instructions: "Run for 10 minutes.",
+    instructions: "Run for 10 minutes",
   },
   {
     title: "Walk - 10 mins",
     type: "lifestyle",
     frequency: 1,
-    instructions: "Walk for 10 minutes.",
+    instructions: "Walk for 10 minutes",
   },
   {
     title: "Walk - 20 mins",
     type: "lifestyle",
     frequency: 1,
-    instructions: "Walk for 20 minutes.",
+    instructions: "Walk for 20 minutes",
   },
   {
     title: "Swim - 15 mins",
     type: "lifestyle",
     frequency: 1,
-    instructions: "Swim for 15 minutes.",
+    instructions: "Swim for 15 minutes",
   },
 ];
 
