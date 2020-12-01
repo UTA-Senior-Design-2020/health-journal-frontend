@@ -376,7 +376,7 @@ function a11yProps(index) {
 
 function loadData(Patients,Appointments) {
   let dict = [{ name:"", activity:"", appointment_last:"", appointment_next:"", patient_id:"", patient_dues:""}];
-  var arrayofPatients = [];
+  var arrayOfPatients = [];
   var appointments = loadAppointments(Appointments)
 
     for(const Patient in Patients)
@@ -391,15 +391,15 @@ function loadData(Patients,Appointments) {
       dict.appointment_next = ""
       dict.patient_id = Patients[Patient].PatientId
       dict.patient_dues = ""
-      arrayofPatients.push(dict)
+      arrayOfPatients.push(dict)
       dict = [{}];
     }
-    return arrayofPatients
+    return arrayOfPatients
 }
 
 function loadAppointments(Appointments) {
   let dict = [{ AppointmentID:"", PatientID:"", DoctorID:"", Date:"", StartTime:"", EndTime:"", Status: ""}];
-  var arrayofAppointments = [];
+  var arrayOfAppointments = [];
   for(const Appointment in Appointments)
   {
     dict.AppointmentID = Appointments[Appointment].AppointmentId
@@ -409,10 +409,10 @@ function loadAppointments(Appointments) {
     dict.StartTime = Appointments[Appointment].StartTime
     dict.EndTime = Appointments[Appointment].EndTime
     dict.Status = Appointments[Appointment].Status
-    arrayofAppointments.push(dict)
+    arrayOfAppointments.push(dict)
     dict = [{}];
   }
-  return arrayofAppointments
+  return arrayOfAppointments
 }
 
 export function PatientsList() {
@@ -421,18 +421,23 @@ export function PatientsList() {
     const {currentUser} = useAuth();
     const [Patients, setPatients] = useState([]);
     const [Appointments, setAppointments] = useState([]);
+    const [AppointmentsLast, setAppointmentsLast] = useState([]);
 
     useEffect(() => {
       async function getData(){
         try{
         let {data} = await axios.get("http://localhost:5000/patients/");
-        var data2 = await axios.get("http://localhost:5000/appointments/"+currentUser.uid);
+        var data2 = await axios.get("http://localhost:5000/appointments/"+currentUser.uid); 
+        var data3 = await axios.get("http://localhost:5000/appointments/"+1+"/appointmentLast"); // needs to use patientID instead 
         setPatients(data);
         setAppointments(data2.data);
+        setAppointmentsLast(data3.data);
+        console.log(data);
+        console.log(data3.data)
       }
       catch(err)
       {
-        console.err(err);
+        //console.err(err);
       }
     }
       getData();
