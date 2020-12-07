@@ -14,12 +14,12 @@ const useStyles = makeStyles({
 
 export default function RecentlySeen() {
     const classes = useStyles();
-    var patients = ['George Fields','Jane Doe', 'Suk MaDeek'];
+    var patients = ['Sadrac Tijerina','Mason McDaniel'];
     return (
         <div >
             <Typography className={classes.title}>Recently Seen</Typography>
-            <NavCard CardTitle="word" PatientName={patients[0]} AppointmentStartTime="3:00 PM"/>
-            <NavCard CardTitle="word" PatientName={patients[1]} AppointmentStartTime="1:45 PM"/>
+            <NavCard CardTitle="word" PatientName={patients[0]} AppointmentStartTime="1:44 PM"/>
+            <NavCard CardTitle="word" PatientName={patients[1]} AppointmentStartTime="3:08 PM"/>
         </div>
     )
 }

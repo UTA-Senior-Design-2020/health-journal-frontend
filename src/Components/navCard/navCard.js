@@ -49,6 +49,5 @@ export default function NavCard({CardTitle, BackgroundColor, SubtitleColor, Text
                 {AppointmentStartTime}
             </Box>
         </Box>
-        <IconButton className={classes.button} style={{color: {SubtitleColor}}}><MoreVertIcon/></IconButton>
     </Box>);
 }
