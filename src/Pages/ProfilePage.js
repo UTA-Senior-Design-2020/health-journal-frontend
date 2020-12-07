@@ -57,7 +57,8 @@ const useStyles = makeStyles((theme) => ({
   },
   photo: {
     height: "200px",
-    width: "280px"
+    width: "280px",
+    backgroundSize: "contain"
   }
 }));
 
@@ -87,7 +88,7 @@ export default function ProfilePage() {
       };
       setImages(userAvatarData.value); // here we return the base64 image data to our component
       //setImages("data:image/png;base64," + res.data.data);
-      //console.log(res.data.data);
+      console.log(res.data.data);
     }
     
     getData();
@@ -106,7 +107,7 @@ export default function ProfilePage() {
   const uploadFile = async () => {
     const formData = new FormData();
     formData.append('file', file); // appending file
-    console.log(formData.get('file'));
+    //console.log(formData.get('file'));
     const res = await axios.put('http://localhost:5000/doctors/upload/'+currentUser.uid, formData);
   }
 
@@ -123,7 +124,7 @@ export default function ProfilePage() {
         <br />
         <input ref={el} onChange={handleChange} type="file" accept="image/*"></input>
         <br />
-        <button onClick={() => {uploadFile(); refreshPage();}}>Submit</button> 
+        <button onClick={() => {uploadFile(); refreshPage(); }}>Submit</button> 
       </Card>
       <Card style={{}} className={classes.text}>
       <form noValidate autoComplete="off">
