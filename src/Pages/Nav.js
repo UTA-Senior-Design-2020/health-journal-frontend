@@ -44,6 +44,8 @@ const navList = [
   { name: "Patients", icon: PeopleIcon, to: "/patients" }
 ];
 
+const hrefList = ["inbox", "trash", "spam"];
+
 // TODO
 const actionList = [];
 const recentlySeen = [];
@@ -155,16 +157,25 @@ function Nav(props) {
           })}
         </List>
         <Divider />
-        <List>
-          {["All mail", "Trash", "Spam"].map((text, index) => (
-            <ListItem className={classes.list} button key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
+        <ListItem component="a" href={"https://mail.google.com/mail/u/0/#"+hrefList[0]} className={classes.list} button key={"All mail"}>
+          <ListItemIcon>
+            <InboxIcon />
+          </ListItemIcon>
+          <ListItemText primary={"All mail"} />
+        </ListItem>
+        <ListItem component="a" href={"https://mail.google.com/mail/u/0/#"+hrefList[1]} className={classes.list} button key={"Trash"}>
+          <ListItemIcon>
+            <MailIcon />
+          </ListItemIcon>
+          <ListItemText primary={"Trash"} />
+        </ListItem>
+        <ListItem component="a" href={"https://mail.google.com/mail/u/0/#"+hrefList[2]} className={classes.list} button key={"Spam"}>
+          <ListItemIcon>
+          <InboxIcon />
+          </ListItemIcon>
+          <ListItemText primary={"Spam"} />
+        </ListItem>
+        
         <Divider />
         <RecentlySeen />
         <SettingsButton/>
