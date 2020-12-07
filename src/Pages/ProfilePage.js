@@ -15,7 +15,19 @@ import CardContent from '@material-ui/core/CardContent';
 import { useForm } from 'react-hook-form';
 import FormData from 'form-data';
 import axios from "axios";
+import Input from '@material-ui/core/Input';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Slide from '@material-ui/core/Slide';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import { useAuth } from "../Context/AuthContext";
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -30,6 +42,9 @@ const useStyles = makeStyles((theme) => ({
   left: {
     float: "left"
 
+  },
+  profTitle: {
+    fontSize: 26
   },
   profile: {
     position: "absolute",
@@ -46,7 +61,12 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom:"20px"
   },
   uploadButton: {
-    marginTop:"3px",
+    marginTop:"10px",
+    background: "#2196F3",
+    color: "white"
+  },
+  submitButton: {
+    marginTop:"10px",
     background: "#2196F3",
     color: "white"
   },
@@ -59,6 +79,10 @@ const useStyles = makeStyles((theme) => ({
     height: "200px",
     width: "280px",
     backgroundSize: "contain"
+  },
+  check: {
+    marginLeft: "110px",
+    color: "green"
   }
 }));
 
@@ -70,6 +94,15 @@ export default function ProfilePage() {
   const [file, setFile] = useState(''); // storing the uploaded file    // storing the recived file from backend
   const [images, setImages] = useState();
   const el = useRef(); // accesing input element
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   useEffect(() => {
     async function getData(){
@@ -94,7 +127,7 @@ export default function ProfilePage() {
     getData();
   }, [])
   
-  function refreshPage(){
+  const refreshPage = () => {
     window.location.reload();
   }
 
@@ -120,11 +153,19 @@ export default function ProfilePage() {
       
       <br />
       <Card className={classes.profile}>
+        <Typography className={classes.profTitle}>Change Profile Picture</Typography>
         <img src={images} className={classes.photo}/>
         <br />
-        <input ref={el} onChange={handleChange} type="file" accept="image/*"></input>
+        <Button
+          variant="contained"
+          component="label"
+          className={classes.uploadButton}
+        > Upload File
+        <input ref={el} onChange={handleChange} type="file" hidden accept="image/*"></input>
+        </Button>
+        
         <br />
-        <button onClick={() => {uploadFile(); refreshPage(); }}>Submit</button> 
+        <Button className={classes.submitButton} onClick={() => {uploadFile(); refreshPage(); }}>Submit</Button> 
       </Card>
       <Card style={{}} className={classes.text}>
       <form noValidate autoComplete="off">
@@ -152,9 +193,25 @@ export default function ProfilePage() {
         />
         </form>
         <br />
-        <Button className={classes.saveButton} variant="contained" component="span" >
+        <Button onClick={() => {handleClickOpen();}} className={classes.saveButton} variant="contained" component="span" >
           Save
         </Button>
+        <Dialog
+        open={open}
+        TransitionComponent={Transition}
+        keepMounted
+        onClose={handleClose}
+        >
+          <DialogTitle >{"Profile information updated!"}</DialogTitle>
+          <DialogContent>
+            <CheckCircleIcon className={classes.check}/>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>
+              Ok
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Card>
       
     </div>
