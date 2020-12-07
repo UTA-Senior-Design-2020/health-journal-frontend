@@ -18,6 +18,7 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import SearchIcon from '@material-ui/icons/Search';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import axios from "axios";
+import ReactDOM from "react-dom";
 
 // following imports are for Material-Table
 import AddBox from '@material-ui/icons/AddBox';  
@@ -144,16 +145,17 @@ const useStyles = makeStyles({
       '&:hover': {
         backgroundColor: fade("rgba(200, 200, 200, 0.76)", 0.25),
       },
-      marginLeft: 0,
+      marginLeft: "120px",
+      //paddingLeft: "10%",
       width: '100%',
       [theme.breakpoints.up('sm')]: {
-        marginLeft: theme.spacing(1),
+        marginLeft: theme.spacing(5),
         width: 'auto',
       },
       marginRight: theme.spacing(2)
   },
   searchIcon: {
-      padding: theme.spacing(0, 2),
+      padding: theme.spacing(0, 1),
       height: '100%',
       position: 'absolute',
       pointerEvents: 'none',
@@ -173,7 +175,7 @@ const useStyles = makeStyles({
       [theme.breakpoints.up('sm')]: {
         width: '16ch',
         '&:focus': {
-          width: '16ch', // when this is > 16 for transition effect, formatting of App Bar gets messed up.
+          width: '24ch', // when this is > 16 for transition effect, formatting of App Bar gets messed up.
         },
       },
   },
@@ -196,27 +198,37 @@ export default function Patients() {
   );
 }
 
-// put back log out button top right
+var patientList = [];
+
+export function getPatientList() {
+  return patientList;
+}
+
+export function setPatientList(tempPatientList) {
+  patientList = tempPatientList;
+  ///console.log(patientList)
+}
+
 export function TopAppBar() {
     const classes = useStyles();
     return (
         <div className={classes.topBar}>
-          
           <AppBar position="static" color="inherit" style={{height: "98%"}}>
             <Toolbar>
-              <Button style={{marginTop: ".9%", marginLeft: "1%", display: "block",}}
+              <Button style={{marginTop: ".9%", marginLeft: "1%", display: "block",}} // button currently nonfunctional
                 variant="contained"
                 color="default"
                 className={classes.button}
                 startIcon={<StarsIcon />}
                 >
-                Add New Patient
+                Add New Patient 
               </Button>
-              <div className={classes.search}>
+              
+              <div className={classes.search} >
                 <div className={classes.searchIcon}>
                   <SearchIcon />
                 </div>
-                <InputBase
+                <InputBase id="search"
                   placeholder="Search"
                   classes={{
                     root: classes.inputRoot,
@@ -225,12 +237,6 @@ export function TopAppBar() {
                   inputProps={{'aria-label': 'search'}}
                 />
               </div> 
-                <Button style={{marginLeft: "70%",}}
-                color="default"
-                startIcon={<ExitToAppIcon />}
-                size="large"
-                >
-                </Button>
             </Toolbar>
           </AppBar>
         </div>
@@ -249,7 +255,7 @@ export function PatientBox() {
               position: "absolute",
               marginLeft: "-1%",
               marginTop: "-1%",
-              height: "106%", // old: 106%
+              height: "106%",
               //width: "auto",  // not sure if this does anything, but will leave in for now
               borderRadius: "2px 0px 0px 2px", 
               boxShadow: "5px 0px 4px rgba(0,0,0,2)",
@@ -266,7 +272,7 @@ export function PatientBox() {
                   <strong>Address:</strong> 42 Wallaby Way, Sydney, TX 76013
               </Typography>
               <Typography variant="h6" style={{position: "relative", paddingTop: "%"}}>
-                  <strong>Primary Care Physician:</strong> Dr. Beats 
+                  <strong>Primary Care Physician:</strong> Dr. Long 
               </Typography>
               <Typography variant="h6" style={{position: "relative", paddingTop: "%", fontSize:"70%", textTransform: "uppercase", color: "rgba(255, 255, 255, 0.76)"}}>
                   NicciTriani@gmail.com
@@ -288,13 +294,38 @@ export function PatientBox() {
     );
 }
 
+function getSearchField(){
+  return 
+}
+
 export function ButtonMessage() {
     const classes = useStyles();
+
+    const [Patients, setPatients] = useState([]);
+    useEffect(() => {
+        async function getData(){
+          try{
+          let {data} = await axios.get("http://localhost:5000/patients/");
+          setPatients(data);     
+          //console.log(data);
+        }
+        catch(err)
+        {
+          //console.err(err);
+        }
+      }
+        getData();
+      }, []) 
+    useEffect(() => { 
+    });  
+    
     return (
-    <Button className={classes.buttonWhiteFont}>
+    <Button className={classes.buttonWhiteFont} onClick={() => { 
+      alert('Call this number: \n'+Patients[0].CallPhone) }}>
         <Typography component={"span"} variant="h6" style={{border: "none", fontWeight: "bold"}}>
             Message
         </Typography>
+
     </Button>
         );
 }
@@ -374,10 +405,13 @@ function a11yProps(index) {
     };
   }
 
-function loadData(Patients,Appointments) {
+function loadData(Patients,Appointments,AppointmentsLast) {
   let dict = [{ name:"", activity:"", appointment_last:"", appointment_next:"", patient_id:"", patient_dues:""}];
   var arrayOfPatients = [];
   var appointments = loadAppointments(Appointments)
+  var appointmentLast = loadAppointmentLast(AppointmentsLast)
+  //console.log(appointments)
+  
 
     for(const Patient in Patients)
     {
@@ -385,7 +419,8 @@ function loadData(Patients,Appointments) {
       dict.activity = ""
 
       
-      dict.appointment_last = appointments[Patients[Patient.PatientId]]
+      dict.appointment_last = appointments[Patients[Patient.Date]]
+      //dict.appointment_last = appointmentLast[Patients[Patient.PatientId]]
 
 
       dict.appointment_next = ""
@@ -415,6 +450,21 @@ function loadAppointments(Appointments) {
   return arrayOfAppointments
 }
 
+function loadAppointmentLast(appointmentsLast) {
+  let dict = [{ AppointmentLast: ""}];
+  var arrayOfAppointmentLast = [];
+  for(const appLast in appointmentsLast)
+  {
+    dict.AppointmentLast = appointmentsLast[appLast].AppointmentLast
+    arrayOfAppointmentLast.push(dict)
+    dict = [{}];
+  }
+  return arrayOfAppointmentLast
+
+}
+
+var realActivePatient = [];
+
 export function PatientsList() {
     const classes = useStyles();
 
@@ -422,18 +472,25 @@ export function PatientsList() {
     const [Patients, setPatients] = useState([]);
     const [Appointments, setAppointments] = useState([]);
     const [AppointmentsLast, setAppointmentsLast] = useState([]);
+    //const [activePatient, setActivePatient] = useState([]);
+    var activePatient = []
 
     useEffect(() => {
       async function getData(){
         try{
         let {data} = await axios.get("http://localhost:5000/patients/");
+        setPatients(data);     
+
         var data2 = await axios.get("http://localhost:5000/appointments/"+currentUser.uid); 
-        var data3 = await axios.get("http://localhost:5000/appointments/"+1+"/appointmentLast"); // needs to use patientID instead 
-        setPatients(data);
         setAppointments(data2.data);
+
+        //needs to make call for every patientID in database
+        var data3 = await axios.get("http://localhost:5000/appointments/"+Patients.PatientId+"/appointmentLast"); // needs to use patientID instead 
         setAppointmentsLast(data3.data);
-        console.log(data);
-        console.log(data3.data)
+
+        //console.log(data);
+        //console.log(data2.data);
+        //console.log(data3.data);
       }
       catch(err)
       {
@@ -466,34 +523,85 @@ export function PatientsList() {
     };
     const [value, setValue] = React.useState(0);
 
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
+    function toggle(id) {
+      console.log(id);
     }
+
+    const selectedRow = React.useRef([]);
+    const updateTimer = React.useRef(null);
     
     return ( 
-        <div>
+        <div>        
+        <Card className={classes.blueBox}>
+        <CardContent>
+          <Grid container spacing={3}>
+            <div>
+            <img src={require('./patient_pic.png')} 
+            style={{
+              position: "absolute",
+              marginLeft: "-1%",
+              marginTop: "-1%",
+              height: "106%",
+              //width: "auto",  // not sure if this does anything, but will leave in for now
+              borderRadius: "2px 0px 0px 2px", 
+              boxShadow: "5px 0px 4px rgba(0,0,0,2)",
+              }}/>
+            </div>
+            <div style={{marginLeft: "39.96%"}}>
+              <Typography variant="h4" style={{position: "relative", paddingTop: "", fontWeight:"bold", fontSize: "250%",}}>
+                  { updateTimer.current = setTimeout(() => {
+                    activePatient
+                    updateTimer.current = null;
+                    }, 1000)
+                  } 
+              </Typography>
+              <Typography variant="h6" style={{position: "relative", paddingTop: "3%"}}>
+                  <strong>Date of Birth:</strong> 11/02/2020
+              </Typography>
+              <Typography variant="h6" style={{position: "relative", paddingTop: "%"}}>
+                  <strong>Address:</strong> 42 Wallaby Way, Sydney, TX 76013
+              </Typography>
+              <Typography variant="h6" style={{position: "relative", paddingTop: "%"}}>
+                  <strong>Primary Care Physician:</strong> Dr. Long 
+              </Typography>
+              <Typography variant="h6" style={{position: "relative", paddingTop: "%", fontSize:"70%", textTransform: "uppercase", color: "rgba(255, 255, 255, 0.76)"}}>
+                  NicciTriani@gmail.com
+              </Typography>
+              <Typography variant="h6" style={{position: "relative", paddingTop: "%", fontSize:"70%", color: "rgba(255, 255, 255, 0.76)"}}>
+                  (555) 555-5555
+              </Typography>
+              <Typography variant="h6" style={{position: "absolute", marginLeft:"44%", marginTop: "-18%", fontSize:"72%", color: "rgba(255, 255, 255, 0.76)"}}>
+                  Currently Patient
+              </Typography>
+              <Typography variant="h6" style={{position: "absolute", marginLeft:"44%", marginTop: "-16%", fontSize:"72%", color: "rgba(255, 255, 255, 0.76)"}}>
+                  HH:MM DD/MM/YY
+              </Typography>    
+            </div>
+            <AccessTimeIcon className={classes.timeIcon}/>
+          </Grid>
+        </CardContent>
+      </Card>
+        {setPatientList(Patients)}  
         <AppBar position="static" // can AppBar height dynamically react to MaterialTable height?
         style={{
           position: "absolute",
           marginLeft: "0.75%",
-          marginTop: "25%",
-          width: "83%",
+          marginTop: "21%",
+          width: "0%", // change this to 83% to reveal 'All', 'Seen' and 'Upcoming' tabs
           height: "50%",
           background: "#FFFFFF",
           color: "black",
         }} >
-            <Tabs value={value} onChange={handleChange} aria-label="tabs test">
-              <Tab label="All" {...a11yProps(0)} />
-              <Tab label="Seen" {...a11yProps(1)} />
-              <Tab label="Upcoming" {...a11yProps(2)} />
-            </Tabs>
         </AppBar>
         <TabPanel value={value} index={0}>  {/* ALL */}
-          <MaterialTable
+          <MaterialTable onSearchChange={() => {
+        //setActivePatient(tableRef.current.state.data);
+        console.log(activePatient);
+      }} id='table'
           style={{
             position: "absolute",
-            marginTop: "27.8%",
-            marginLeft: "-8%",
+            marginTop: "24.8%",
+            marginLeft: "-8.3%",
             zIndex: "9999", // without this, items end up behind the Tabs
             border: "none",
             boxShadow: "none",
@@ -507,48 +615,24 @@ export function PatientsList() {
                 { title: 'PatientID', field: 'patient_id', type: 'numeric' },
               ]}
             data={ // loadData() induces a warning, but this function call is necessary.
-              (loadData(Patients,Appointments))
+              (loadData(Patients,Appointments,AppointmentsLast))
             }
             options={{
                 selection: true,
                 rowStyle: rowData => ({ backgroundColor: rowData.tableData.checked ? '#37b15933' : '' }),
                 paging: false,
+                search: true,
             }}
+            
+            onSelectionChange={(data) => {
+            if (data.length) {
+              activePatient = data
+            }
+          }}
             icons={tableIcons}
           />
           </TabPanel>
         <TabPanel value={value} index={1}>  {/* SEEN */}
-        <MaterialTable
-          style={{
-            position: "absolute",
-            marginTop: "26.3%",
-            marginLeft: "0%",
-            zIndex: "9999", // without this, items end up behind the Tabs
-            border: "none",
-            boxShadow: "none",
-            width: "82.3%",
-          }}
-            title="Patients" // if(appointment_last within last 5 days): include patient info in table
-            columns={[ 
-                { title: 'Name', field: 'name' },
-                { title: 'Last Login', field: 'activity' },
-                { title: 'Last Appointment', field: 'appointment_last', type: 'date'},
-                { title: 'Next Appointment', field: 'appointment_next', type: 'date'},
-                { title: 'PatientID', field: 'patient_id', type: 'numeric' },
-                { title: 'Dues', field: 'patient_dues', type: 'numeric' },
-              ]}
-            data={[
-                { name: 'yeah boy', activity: '14/04/20', appointment_next: '10/23/20', patient_id: '0001', patient_dues: '$200'},
-                { name: 'Erin Levin', activity: '17/04/20', patient_id: '0002', patient_dues: '$300'},
-                { name: 'Test Ing', activity: '11/01/20', patient_id: '0003', patient_dues: '-'},
-            ]}
-            options={{
-                selection: true,
-                rowStyle: rowData => ({ backgroundColor: rowData.tableData.checked ? '#37b15933' : '' }),
-                paging: false,
-            }}
-            icons={tableIcons}
-          />
         </TabPanel>
         <TabPanel value={value} index={2}> {/* UPCOMING */}
         {/* if(appointment_next within next 24 hours): include patient info in table */}
