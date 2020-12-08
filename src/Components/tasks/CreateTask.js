@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
@@ -11,6 +11,7 @@ import {
   DialogTitle,
   DialogActions,
 } from "@material-ui/core";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -20,16 +21,43 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function CreateTask({ task, open, handleClose }) {
+export default function CreateTask({ task, isEditMode }) {
   const classes = useStyles();
-  const { title, type, frequency, instructions } = task;
-  function handleChange(event) {
-    // this.setState({ id: event.target.value });
+  // const { title, type, frequency, instructions } = task;
+  const [taskForm, setTaskForm] = useState({ ...task });
+  const [patientId, setPatientId] = useState("null");
+
+  useEffect(() => {
+    if (taskForm === null)
+      setTaskForm({ title: "", type: "", frequency: 1, instructions: "" });
+    setTaskForm({
+      ...taskForm,
+      startDate: new Date().toISOString().substring(0, 10),
+    });
+    console.log("task", task);
+  }, []);
+
+  async function createNewTaskRequest() {
+    await axios.post("http://localhost:5000/tasks/create", {
+      task: { ...taskForm },
+      patientId: patientId,
+    });
   }
 
-  function handleSubmit(event) {
-    //Make a network call somewhere
+  function handleChange(event) {
+    const { id, value } = event.target;
+    // console.log(id, value);
+
+    setTaskForm({ ...taskForm, [id]: value });
+  }
+
+  async function handleSubmit(event) {
     event.preventDefault();
+    await createNewTaskRequest();
+    isEditMode(false);
+  }
+  function handleClose() {
+    isEditMode(false);
   }
 
   return (
@@ -42,15 +70,26 @@ export default function CreateTask({ task, open, handleClose }) {
         <DialogTitle id="form-dialog-title">Task Form</DialogTitle>
 
         <DialogContent>
-          <DialogContentText>{type}</DialogContentText>
-
+          {/* <DialogContentText>{type}</DialogContentText> */}
+          <TextField
+            autoFocus
+            // margin="dense"
+            id="userId"
+            label="userId"
+            type="userId"
+            // defaultValue={title}
+            required
+            fullWidth
+          />
           <TextField
             autoFocus
             // margin="dense"
             id="title"
             label="Title"
             type="text"
-            defaultValue={title}
+            // defaultValue={taskForm.title}
+            value={taskForm.title}
+            onChange={handleChange}
             // fullWidth
           />
           <TextField
@@ -59,27 +98,31 @@ export default function CreateTask({ task, open, handleClose }) {
             id="type"
             label="Type"
             type="text"
-            defaultValue={type}
+            value={taskForm.type}
+            onChange={handleChange}
             // fullWidth
           />
           <TextField
             autoFocus
             // margin="dense"
-            id="type"
-            label="Type"
-            type="text"
-            defaultValue={frequency}
+            id="frequency"
+            label="Frequency"
+            type="number"
+            value={taskForm.frequency}
+            onChange={handleChange}
             // fullWidth
           />
           <TextField
             autoFocus
-            id="type"
+            id="startDate"
             label="State Date"
             type="date"
-            defaultValue={new Date().toISOString().substring(0, 10)}
+            // defaultValue={new Date().toISOString().substring(0, 10)}
+            value={taskForm.startDate}
+            onChange={handleChange}
             fullWidth
           />
-          <TextField
+          {/* <TextField
             autoFocus
             id="type"
             label="End Date"
@@ -88,16 +131,17 @@ export default function CreateTask({ task, open, handleClose }) {
             size="small"
             defaultValue={new Date().toISOString().substring(0, 10)}
             fullWidth
-          />
+          /> */}
           <TextField
             autoFocus
             margin="dense"
-            id="type"
-            label="Type"
+            id="instructions"
+            label="Instructions"
             type="text"
             multiline
             rows={2}
-            defaultValue={instructions}
+            value={taskForm.instructions}
+            onChange={handleChange}
             fullWidth
           />
         </DialogContent>
@@ -106,8 +150,8 @@ export default function CreateTask({ task, open, handleClose }) {
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleClose} color="primary">
-            Subscribe
+          <Button onClick={handleSubmit} color="primary">
+            Create
           </Button>
         </DialogActions>
       </Dialog>

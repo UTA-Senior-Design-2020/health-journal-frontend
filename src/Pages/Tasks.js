@@ -55,39 +55,19 @@ const useStyles = makeStyles({
 export default function Tasks() {
   const classes = useStyles();
   const TYPES = ["medication", "lifestyle"];
-  const [tasks, setTasks] = useState([{ id: 1, name: "Run" }]);
+  const [tasks, setTasks] = useState({ taskList });
   const [selectedTab, setSelectedTab] = useState(0);
-
-  useEffect(() => {
-    // async function getData() {
-    //   let { data } = await axios.get("http://localhost:5000/tasks/");
-    //   console.log("data:", data);
-    //   setTasks(data);
-    // }
-    // getData();
-  }, []);
-
-  async function fetchTasks(patientId) {
-    try {
-      let apiResponse = await axios.get("tasks");
-      console.log("tasks > tasks GET:", apiResponse);
-
-      let { data, status } = apiResponse;
-      console.log("tasks > apiResponse", apiResponse);
-      console.log("tasks > data:", data);
-      console.log("tasks > status:", status);
-      if (status === 200) {
-        setTasks(data);
-      }
-    } catch (error) {
-      console.log("tasks > error:", error);
-      setTasks([]);
-    }
-  }
+  const [editMode, isEditMode] = useState(false);
+  const [selectedTask, setSelectedTask] = useState(taskList[0].title);
 
   return (
     <div className={classes.root}>
-      <CreateTasks task={taskList[0]}></CreateTasks>
+      {editMode && (
+        <CreateTasks
+          task={taskList.filter((task) => task.title === selectedTask)[0]}
+          isEditMode={isEditMode}
+        ></CreateTasks>
+      )}
       <Typography variant="h4" gutterBottom>
         Tasks
       </Typography>
@@ -120,7 +100,8 @@ export default function Tasks() {
           className={classes.type}
           startIcon={<CreateIcon fontSize="large" />}
           onClick={() => {
-            alert("MAKING NEW");
+            setSelectedTask("");
+            isEditMode(true);
           }}
         >
           Create New
@@ -133,7 +114,12 @@ export default function Tasks() {
           {taskList
             .filter((task) => task.type === TYPES[selectedTab])
             .map((task) => (
-              <TaskCard {...task}></TaskCard>
+              <TaskCard
+                key={task.title}
+                {...task}
+                setSelectedTask={setSelectedTask}
+                isEditMode={isEditMode}
+              ></TaskCard>
             ))}
           {/* <TaskCard title="zyrtec" type="medication"></TaskCard>
           <TaskCard title="Clarinex"></TaskCard>

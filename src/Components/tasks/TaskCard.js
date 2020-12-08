@@ -24,7 +24,14 @@ const useStyles = makeStyles({
   },
 });
 
-export default function TaskCard({ title, type, frequency, instructions }) {
+export default function TaskCard({
+  title,
+  type,
+  frequency,
+  instructions,
+  setSelectedTask,
+  isEditMode,
+}) {
   const borderColor = type === "medication" ? "#2196f3" : "#ffeb3b";
 
   const classes = useStyles({ borderColor });
@@ -35,12 +42,18 @@ export default function TaskCard({ title, type, frequency, instructions }) {
         <div className={classes.info}>
           <Typography variant="h6">{title}</Typography>
           <Typography variant="caption" gutterBottom>
-            Allergy Medicine
+            ({frequency}) {type}
           </Typography>
           <Typography variant="body2">{instructions}</Typography>
         </div>
         <Box className={classes.actions}>
-          <IconButton>
+          <IconButton
+            onClick={() => {
+              console.log("selected", title);
+              setSelectedTask(title);
+              isEditMode(true);
+            }}
+          >
             <SendIcon fontSize="small" />
           </IconButton>
         </Box>

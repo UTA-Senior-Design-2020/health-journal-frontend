@@ -8,14 +8,14 @@ const defaultTasks = [
   {
     title: "Clarinex",
     type: "medication",
-    frequency: 1,
-    instructions: "Take once a day",
+    frequency: 2,
+    instructions: "Take twice a day",
   },
   {
     title: "Xyzal",
     type: "medication",
-    frequency: 1,
-    instructions: "Take once a day",
+    frequency: 3,
+    instructions: "Take with a meal",
   },
   {
     title: "Alavert",
