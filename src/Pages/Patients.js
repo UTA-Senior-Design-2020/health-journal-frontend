@@ -402,7 +402,7 @@ function a11yProps(index) {
   }
 
 function loadData(Patients,Appointments,AppointmentsLast) {
-  let dict = [{ name:"", activity:"", appointment_last:"", appointment_next:"", patient_id:"", patient_dues:"", AddressId:"", CallPhone:"", TextPhone:"",Email:"", }];
+  let dict = [{ name:"", activity:"", appointment_last:"", appointment_next:"", patient_id:"", patient_dues:"", AddressId:"", CallPhone:"", TextPhone:"",Email:"", ProfilePicture:""}];
   console.log(Patients)
   var arrayOfPatients = [];
   var appointments = loadAppointments(Appointments)
@@ -426,6 +426,7 @@ function loadData(Patients,Appointments,AppointmentsLast) {
       dict.CallPhone = Patients[Patient].CallPhone
       dict.TextPhone = Patients[Patient].TextPhone
       dict.Email = Patients[Patient].Email
+      dict.ProfilePicture = Patients[Patient].ProfilePicture
       arrayOfPatients.push(dict)
       dict = [{}];
     }
@@ -463,8 +464,6 @@ function loadAppointmentLast(appointmentsLast) {
 
 }
 
-var realActivePatient = [];
-
 export function PatientsList() {
     const classes = useStyles();
 
@@ -473,7 +472,6 @@ export function PatientsList() {
     const [Appointments, setAppointments] = useState([]);
     const [AppointmentsLast, setAppointmentsLast] = useState([]);
     const [activePatient, setActivePatient] = useState([]);
-    //var activePatient = []
 
     useEffect(() => {
       async function getData(){
@@ -523,28 +521,24 @@ export function PatientsList() {
     };
     const [value, setValue] = React.useState(0);
 
-    function toggle(id) {
-      console.log(id);
-    }
-
-    const selectedRow = React.useRef([]);
-    const updateTimer = React.useRef(null);
-    
     return ( 
         <div>        
         <Card className={classes.blueBox}>
         <CardContent>
           <Grid container spacing={3}>
             <div>
-            <img src={require('./patient_pic.png')} 
+            <img src={
+              //require('./patient_pic.png')
+              activePatient.length ? activePatient[0].ProfilePicture : ""
+            } 
             style={{
               position: "absolute",
-              marginLeft: "-1%",
+              marginLeft: "5%",
               marginTop: "-1%",
               height: "106%",
               //width: "auto",  // not sure if this does anything, but will leave in for now
               borderRadius: "2px 0px 0px 2px", 
-              boxShadow: "5px 0px 4px rgba(0,0,0,2)",
+              boxShadow: "5px 0px 4px rgba(0,0,0,0)",
               }}/>
             </div>
             <div style={{marginLeft: "39.96%"}}>
