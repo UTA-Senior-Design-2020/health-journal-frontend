@@ -296,28 +296,9 @@ export function PatientBox() {
 
 export function ButtonMessage() {
     const classes = useStyles();
-
-    const [Patients, setPatients] = useState([]);
-    useEffect(() => {
-        async function getData(){
-          try{
-          let {data} = await axios.get("http://localhost:5000/patients/");
-          setPatients(data);     
-          //console.log(data);
-        }
-        catch(err)
-        {
-          //console.err(err);
-        }
-      }
-        getData();
-      }, []) 
-    useEffect(() => { 
-    });  
-    
     return (
     <Button className={classes.buttonWhiteFont} onClick={() => { 
-      alert('Call this number: \n'+Patients[0].CallPhone) }}>
+      alert('Message the number at "Text"') }}>
         <Typography component={"span"} variant="h6" style={{border: "none", fontWeight: "bold"}}>
             Message
         </Typography>
@@ -329,7 +310,8 @@ export function ButtonMessage() {
 export function ButtonCall() {
     const classes = useStyles();
     return (
-    <Button className={classes.buttonWhiteFont} style={{marginLeft: "49.5%"}}>
+    <Button className={classes.buttonWhiteFont} style={{marginLeft: "49.5%"}}
+    onClick={() => {alert('Call the number listed at "Call"')}}>
         <Typography component={"span"} variant="h6" style={{border: "none", fontWeight: "bold"}}>
             Call
         </Typography>
@@ -402,7 +384,8 @@ function a11yProps(index) {
   }
 
 function loadData(Patients,Appointments,AppointmentsLast) {
-  let dict = [{ name:"", activity:"", appointment_last:"", appointment_next:"", patient_id:"", patient_dues:"", AddressId:"", CallPhone:"", TextPhone:"",Email:"", ProfilePicture:""}];
+  let dict = [{ name:"", activity:"", appointment_last:"", appointment_next:"", patient_id:"", patient_dues:"", 
+  AddressId:"", CallPhone:"", TextPhone:"",Email:"", ProfilePicture:"", Birth_Date:"", Primary_Physician:""}];
   console.log(Patients)
   var arrayOfPatients = [];
   var appointments = loadAppointments(Appointments)
@@ -427,6 +410,11 @@ function loadData(Patients,Appointments,AppointmentsLast) {
       dict.TextPhone = Patients[Patient].TextPhone
       dict.Email = Patients[Patient].Email
       dict.ProfilePicture = Patients[Patient].ProfilePicture
+
+      var tempDate = Patients[Patient].Birth_Date.split('T')[0];
+      dict.Birth_Date = tempDate
+
+      dict.Primary_Physician = Patients[Patient].Primary_Physician
       arrayOfPatients.push(dict)
       dict = [{}];
     }
@@ -549,7 +537,7 @@ export function PatientsList() {
               </Typography>
               <Typography variant="h6" style={{position: "relative", paddingTop: "3%"}}>
                   {
-                    activePatient.length ? "Date of Birth: " : ""
+                    activePatient.length ? "Date of Birth: "+activePatient[0].Birth_Date : ""
                   }
               </Typography>
               <Typography variant="h6" style={{position: "relative", paddingTop: "%"}}>
@@ -559,7 +547,7 @@ export function PatientsList() {
               </Typography>
               <Typography variant="h6" style={{position: "relative", paddingTop: "%"}}>
                   {
-                    activePatient.length ? "Primary Care Physician: " : "" //need to add primary care physician field to patients?
+                    activePatient.length ? "Primary Care Physician: "+activePatient[0].Primary_Physician : "" 
                   } 
               </Typography>
               <Typography variant="h6" style={{position: "relative", paddingTop: "%", fontSize:"70%", textTransform: "uppercase", color: "rgba(255, 255, 255, 0.76)"}}>
