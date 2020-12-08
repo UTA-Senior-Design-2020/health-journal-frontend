@@ -86,7 +86,7 @@ export default function CreateTask({ task, open, handleClose }) {
             type="date"
             variant="filled"
             size="small"
-            // defaultValue={new Date().toISOString().substring(0, 10)}
+            defaultValue={new Date().toISOString().substring(0, 10)}
             fullWidth
           />
           <TextField
