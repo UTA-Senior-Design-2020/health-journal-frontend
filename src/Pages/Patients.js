@@ -294,10 +294,6 @@ export function PatientBox() {
     );
 }
 
-function getSearchField(){
-  return 
-}
-
 export function ButtonMessage() {
     const classes = useStyles();
 
@@ -406,13 +402,13 @@ function a11yProps(index) {
   }
 
 function loadData(Patients,Appointments,AppointmentsLast) {
-  let dict = [{ name:"", activity:"", appointment_last:"", appointment_next:"", patient_id:"", patient_dues:""}];
+  let dict = [{ name:"", activity:"", appointment_last:"", appointment_next:"", patient_id:"", patient_dues:"", AddressId:"", CallPhone:"", TextPhone:"",Email:"", }];
+  console.log(Patients)
   var arrayOfPatients = [];
   var appointments = loadAppointments(Appointments)
   var appointmentLast = loadAppointmentLast(AppointmentsLast)
   //console.log(appointments)
   
-
     for(const Patient in Patients)
     {
       dict.name = Patients[Patient].GivenName+ ' ' +Patients[Patient].FamilyName
@@ -426,6 +422,10 @@ function loadData(Patients,Appointments,AppointmentsLast) {
       dict.appointment_next = ""
       dict.patient_id = Patients[Patient].PatientId
       dict.patient_dues = ""
+      dict.AddressId = Patients[Patient].AddressId
+      dict.CallPhone = Patients[Patient].CallPhone
+      dict.TextPhone = Patients[Patient].TextPhone
+      dict.Email = Patients[Patient].Email
       arrayOfPatients.push(dict)
       dict = [{}];
     }
@@ -472,8 +472,8 @@ export function PatientsList() {
     const [Patients, setPatients] = useState([]);
     const [Appointments, setAppointments] = useState([]);
     const [AppointmentsLast, setAppointmentsLast] = useState([]);
-    //const [activePatient, setActivePatient] = useState([]);
-    var activePatient = []
+    const [activePatient, setActivePatient] = useState([]);
+    //var activePatient = []
 
     useEffect(() => {
       async function getData(){
@@ -549,26 +549,39 @@ export function PatientsList() {
             </div>
             <div style={{marginLeft: "39.96%"}}>
               <Typography variant="h4" style={{position: "relative", paddingTop: "", fontWeight:"bold", fontSize: "250%",}}>
-                  { updateTimer.current = setTimeout(() => {
-                    activePatient
-                    updateTimer.current = null;
-                    }, 1000)
-                  } 
+                  { 
+                  activePatient.length ? activePatient[0].name : ""
+                  }
               </Typography>
               <Typography variant="h6" style={{position: "relative", paddingTop: "3%"}}>
-                  <strong>Date of Birth:</strong> 11/02/2020
+                  {
+                    activePatient.length ? "Date of Birth: " : ""
+                  }
               </Typography>
               <Typography variant="h6" style={{position: "relative", paddingTop: "%"}}>
-                  <strong>Address:</strong> 42 Wallaby Way, Sydney, TX 76013
+                  {
+                    activePatient.length ? "Address ID: "+activePatient[0].AddressId : ""
+                  }
               </Typography>
               <Typography variant="h6" style={{position: "relative", paddingTop: "%"}}>
-                  <strong>Primary Care Physician:</strong> Dr. Long 
+                  {
+                    activePatient.length ? "Primary Care Physician: " : "" //need to add primary care physician field to patients?
+                  } 
               </Typography>
               <Typography variant="h6" style={{position: "relative", paddingTop: "%", fontSize:"70%", textTransform: "uppercase", color: "rgba(255, 255, 255, 0.76)"}}>
-                  NicciTriani@gmail.com
+                  {
+                    activePatient.length ? activePatient[0].Email : ""
+                  }
               </Typography>
               <Typography variant="h6" style={{position: "relative", paddingTop: "%", fontSize:"70%", color: "rgba(255, 255, 255, 0.76)"}}>
-                  (555) 555-5555
+                  {
+                    activePatient.length ? "Call: "+activePatient[0].CallPhone : ""
+                  }
+              </Typography>
+              <Typography variant="h6" style={{position: "relative", paddingTop: "%", fontSize:"70%", color: "rgba(255, 255, 255, 0.76)"}}>
+                  {
+                    activePatient.length ? "Text: "+activePatient[0].TextPhone : ""
+                  }
               </Typography>
               <Typography variant="h6" style={{position: "absolute", marginLeft:"44%", marginTop: "-18%", fontSize:"72%", color: "rgba(255, 255, 255, 0.76)"}}>
                   Currently Patient
@@ -596,7 +609,6 @@ export function PatientsList() {
         <TabPanel value={value} index={0}>  {/* ALL */}
           <MaterialTable onSearchChange={() => {
         //setActivePatient(tableRef.current.state.data);
-        console.log(activePatient);
       }} id='table'
           style={{
             position: "absolute",
@@ -619,14 +631,16 @@ export function PatientsList() {
             }
             options={{
                 selection: true,
-                rowStyle: rowData => ({ backgroundColor: rowData.tableData.checked ? '#37b15933' : '' }),
+                //rowStyle: rowData => ({ backgroundColor: rowData.tableData.checked ? '#37b15933' : '' }),
                 paging: false,
                 search: true,
             }}
             
             onSelectionChange={(data) => {
             if (data.length) {
-              activePatient = data
+              //activePatient = data
+              setActivePatient(data)
+              console.log(activePatient)
             }
           }}
             icons={tableIcons}
