@@ -70,6 +70,9 @@ const useStyles = makeStyles((theme) => ({
   check: {
     marginLeft: "75px",
     color: "green"
+  },
+  headers: {
+    color: "#2196F3"
   }
 }));
 
@@ -104,9 +107,9 @@ export default function Settings() {
         <Card.Body>
           <h2 className="text-center mb-4">Profile</h2>
           {error && <Alert variant="danger">{error}</Alert>}
-          <strong>Email:</strong> {currentUser.email}
+          <strong className={classes.headers}>Email:</strong> {currentUser.email}
           <br/>
-          <strong>Care Team Name:</strong> {"Team 1"}
+          <strong className={classes.headers}>Care Team Name:</strong> {"Team 1"}
           <br/>
           <br/>
           <strong>

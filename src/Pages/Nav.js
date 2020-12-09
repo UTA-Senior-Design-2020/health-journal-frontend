@@ -117,7 +117,7 @@ function Nav(props) {
         <div className={classes.userInfo}>
         <Grid container spacing={2} alignItems="center">
           <Grid item>
-              <Avatar alt="Dr. Young">
+              <Avatar alt="Dr. Myers">
                   <AccountCircleIcon />
               </Avatar>
           </Grid>
@@ -126,7 +126,7 @@ function Nav(props) {
                   <Grid item xs>
                       <Typography variant="h5">
                         <Link to={"/profile"} className={classes.prof}>
-                          Dr. Young
+                          Dr. Myers
                         </Link>
                       </Typography>
                   </Grid>
