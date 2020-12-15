@@ -385,7 +385,7 @@ function a11yProps(index) {
 
 function loadData(Patients,Appointments,AppointmentsLast) {
   let dict = [{ name:"", activity:"", appointment_last:"", appointment_next:"", patient_id:"", patient_dues:"", 
-  AddressId:"", CallPhone:"", TextPhone:"",Email:"", ProfilePicture:"", Birth_Date:"", Primary_Physician:""}];
+  AddressId:"", AddressFake:"", CallPhone:"", TextPhone:"",Email:"", ProfilePicture:"", Birth_Date:"", Primary_Physician:""}];
   console.log(Patients)
   var arrayOfPatients = [];
   var appointments = loadAppointments(Appointments)
@@ -406,6 +406,7 @@ function loadData(Patients,Appointments,AppointmentsLast) {
       dict.patient_id = Patients[Patient].PatientId
       dict.patient_dues = ""
       dict.AddressId = Patients[Patient].AddressId
+      dict.AddressFake = Patients[Patient].AddressFake
       dict.CallPhone = Patients[Patient].CallPhone
       dict.TextPhone = Patients[Patient].TextPhone
       dict.Email = Patients[Patient].Email
@@ -542,7 +543,7 @@ export function PatientsList() {
               </Typography>
               <Typography variant="h6" style={{position: "relative", paddingTop: "%"}}>
                   {
-                    activePatient.length ? "Address ID: "+activePatient[0].AddressId : ""
+                    activePatient.length ? "Address: "+activePatient[0].AddressFake : ""
                   }
               </Typography>
               <Typography variant="h6" style={{position: "relative", paddingTop: "%"}}>
@@ -565,14 +566,7 @@ export function PatientsList() {
                     activePatient.length ? "Text: "+activePatient[0].TextPhone : ""
                   }
               </Typography>
-              <Typography variant="h6" style={{position: "absolute", marginLeft:"44%", marginTop: "-18%", fontSize:"72%", color: "rgba(255, 255, 255, 0.76)"}}>
-                  Currently Patient
-              </Typography>
-              <Typography variant="h6" style={{position: "absolute", marginLeft:"44%", marginTop: "-16%", fontSize:"72%", color: "rgba(255, 255, 255, 0.76)"}}>
-                  HH:MM DD/MM/YY
-              </Typography>    
             </div>
-            <AccessTimeIcon className={classes.timeIcon}/>
           </Grid>
         </CardContent>
       </Card>
